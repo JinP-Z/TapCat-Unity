@@ -51,12 +51,38 @@ namespace TapCat
                 // 添加Animator
                 Animator animator = tapCat.AddComponent<Animator>();
                 
+                // 添加SpriteRenderer（显示猫咪）
+                SpriteRenderer spriteRenderer = tapCat.AddComponent<SpriteRenderer>();
+                
+                // 尝试加载猫咪图片
+                try
+                {
+                    // 方法1：从Resources加载
+                    Sprite catSprite = Resources.Load<Sprite>("Sprites/PlaceholderCat");
+                    if (catSprite != null)
+                    {
+                        spriteRenderer.sprite = catSprite;
+                        Debug.Log("成功加载猫咪图片");
+                    }
+                    else
+                    {
+                        // 方法2：创建临时彩色方块
+                        Debug.LogWarning("猫咪图片未找到，创建临时彩色方块");
+                        spriteRenderer.color = new Color(1f, 0.5f, 0f, 1f); // 橙色
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning("加载猫咪图片失败: " + e.Message);
+                    spriteRenderer.color = Color.red; // 红色作为错误提示
+                }
+                
                 // 添加脚本组件
                 tapCat.AddComponent<TapCatController>();
                 tapCat.AddComponent<AnimationManager>();
                 tapCat.AddComponent<InputHandler>();
                 
-                Debug.Log("创建TapCat游戏对象");
+                Debug.Log("创建TapCat游戏对象并设置SpriteRenderer");
             }
             else
             {
