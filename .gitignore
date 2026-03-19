@@ -86,3 +86,64 @@ ProjectSettings/ProjectSettings.asset
 
 # Packages
 Packages/
+
+# ==========================================
+# 个人信息保护 - 禁止提交到Git
+# 以下文件包含个人信息，严禁提交到公共仓库
+# ==========================================
+
+# OpenClaw 个人配置文件
+USER.md
+SOUL.md
+IDENTITY.md
+HEARTBEAT.md
+TOOLS.md
+AGENTS.md
+
+# 对话记忆文件
+memory/
+MEMORY.md
+
+# 备份文件
+backup*/
+*_backup.*
+*_backup_*
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+
+# 敏感信息
+*.key
+*.pem
+*.p12
+*.crt
+*.cert
+*.env
+*.secret
+config.json
+settings.json
+credentials.json
+
+# 个人笔记
+*.md
+!README.md
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE 文件
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 大文件
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
