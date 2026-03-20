@@ -1,0 +1,31 @@
+TapCat Animation Resources
+==========================
+Extracted from GIF: aae662b1-0bfe-4479-b99c-64acd1632292.gif
+Total frames: 10
+Original size: 160x146 pixels
+Extracted at: 2026-03-20 12:02:15
+Frame rate: 10 FPS (0.1s per frame)
+
+Frame list:
+Frame 00: cat_anim_00.png
+Frame 01: cat_anim_01.png
+Frame 02: cat_anim_02.png
+Frame 03: cat_anim_03.png
+Frame 04: cat_anim_04.png
+Frame 05: cat_anim_05.png
+Frame 06: cat_anim_06.png
+Frame 07: cat_anim_07.png
+Frame 08: cat_anim_08.png
+Frame 09: cat_anim_09.png
+Unity Import Settings:
+- Texture Type: Sprite (2D and UI)
+- Sprite Mode: Single
+- Pixels Per Unit: 100
+- Filter Mode: Point (no filter)
+- Compression: None
+
+Script files:
+- CatAnimationController.cs
+- TapCatWithAnimation.cs
+
+Note: All resources automatically placed by AI assistant.
