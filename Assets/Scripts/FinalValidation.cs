@@ -377,6 +377,7 @@ namespace TapCat
             }
             
             Debug.Log("✓ 验证6通过：零配置运行验证完成");
+            yield return null;
         }
         
         /// <summary>
