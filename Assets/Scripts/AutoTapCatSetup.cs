@@ -1,33 +1,25 @@
 using UnityEngine;
 
 /// <summary>
-/// 自动 TapCat 设置脚本
-/// 场景启动时自动创建所有必要组件
-/// 用户只需点击 Play 即可验收
+/// Auto setup for TapCat. Creates camera and controller when the scene starts.
 /// </summary>
 public class AutoTapCatSetup : MonoBehaviour
 {
-    void Start()
+    private void Start()
     {
-        Debug.Log("🔧 开始自动 TapCat 设置...");
-        
-        // 1. 确保主相机位置正确
+        Debug.Log("Starting TapCat auto setup...");
+
         SetupCamera();
-        
-        // 2. 创建 TapCat 控制器
         CreateTapCatController();
-        
-        // 3. 检查动画资源
         CheckAnimationResources();
-        
-        Debug.Log("✅ 自动设置完成！");
-        Debug.Log("🎮 现在可以点击 Play 测试游戏了！");
-        
-        // 自动销毁自己，清理场景
+
+        Debug.Log("TapCat auto setup complete.");
+        Debug.Log("Press Play to test the game.");
+
         Destroy(gameObject, 2f);
     }
-    
-    void SetupCamera()
+
+    private void SetupCamera()
     {
         Camera mainCamera = Camera.main;
         if (mainCamera == null)
@@ -36,120 +28,97 @@ public class AutoTapCatSetup : MonoBehaviour
             cameraObj.tag = "MainCamera";
             mainCamera = cameraObj.AddComponent<Camera>();
             mainCamera.transform.position = new Vector3(0, 0, -10);
-            Debug.Log("✅ 创建主相机");
+            Debug.Log("Main camera created.");
         }
         else
         {
             mainCamera.transform.position = new Vector3(0, 0, -10);
-            Debug.Log("✅ 调整主相机位置");
+            Debug.Log("Main camera position updated.");
         }
     }
-    
-    void CreateTapCatController()
+
+    private void CreateTapCatController()
     {
-        // 检查是否已存在 FinalTapCat_Animated 组件
         FinalTapCat_Animated existingController = FindObjectOfType<FinalTapCat_Animated>();
-        
         if (existingController != null)
         {
-            Debug.Log("✅ TapCat 控制器已存在");
+            Debug.Log("TapCat controller already exists.");
             return;
         }
-        
-        // 创建新的控制器 GameObject
+
         GameObject controllerObj = new GameObject("TapCatController");
         controllerObj.AddComponent<FinalTapCat_Animated>();
-        
-        Debug.Log("✅ 创建 TapCat 控制器");
+
+        Debug.Log("TapCat controller created.");
     }
-    
-    void CheckAnimationResources()
+
+    private void CheckAnimationResources()
     {
-        Debug.Log("📁 检查动画资源...");
-        
+        Debug.Log("Checking animation resources...");
+
         string spritePath = Application.dataPath + "/Sprites/CatAnimation/";
         if (System.IO.Directory.Exists(spritePath))
         {
             int pngCount = System.IO.Directory.GetFiles(spritePath, "*.png").Length;
-            
+
             if (pngCount >= 10)
             {
-                Debug.Log($"✅ 动画资源完整 ({pngCount} 个 PNG 文件)");
-                Debug.Log("💡 资源位置: Assets/Sprites/CatAnimation/");
-                Debug.Log("💡 需要在 Unity 编辑器中设置 Sprite 导入属性");
+                Debug.Log($"Found {pngCount} PNG files in Assets/Sprites/CatAnimation/.");
+                Debug.Log("Make sure import settings are Sprite (2D and UI).");
             }
             else if (pngCount > 0)
             {
-                Debug.LogWarning($"⚠️ 动画资源不完整: {pngCount}/10 帧");
+                Debug.LogWarning($"Animation frames incomplete: {pngCount}/10.");
             }
             else
             {
-                Debug.LogWarning("⚠️ 动画资源目录为空");
+                Debug.LogWarning("Animation folder exists but is empty.");
             }
         }
         else
         {
-            Debug.LogWarning("⚠️ 动画资源目录不存在: Assets/Sprites/CatAnimation/");
+            Debug.LogWarning("Animation folder not found: Assets/Sprites/CatAnimation/");
         }
-        
-        // 提供设置指南
-        Debug.Log("📝 设置指南：");
-        Debug.Log("   1. 在 Project 面板中，打开 Assets/Sprites/CatAnimation/");
-        Debug.Log("   2. 全选所有 PNG 文件");
-        Debug.Log("   3. 在 Inspector 中设置：");
-        Debug.Log("      - Texture Type: Sprite (2D and UI)");
-        Debug.Log("      - Sprite Mode: Single");
-        Debug.Log("      - Pixels Per Unit: 100");
-        Debug.Log("      - Filter Mode: Point (no filter)");
-        Debug.Log("      - Compression: None");
-        Debug.Log("   4. 点击 Apply");
-        Debug.Log("   5. 选择 TapCatController GameObject");
-        Debug.Log("   6. 将图片拖到 FinalTapCat_Animated 组件的 animationFrames 数组中");
     }
-    
-    // 编辑器工具
-    [ContextMenu("运行自动设置")]
-    void RunAutoSetup()
+
+    [ContextMenu("Run Auto Setup")]
+    private void RunAutoSetup()
     {
         Start();
     }
-    
-    [ContextMenu("检查当前场景")]
-    void CheckCurrentScene()
+
+    [ContextMenu("Check Current Scene")]
+    private void CheckCurrentScene()
     {
-        Debug.Log("=== 场景检查 ===");
-        
-        // 检查相机
+        Debug.Log("=== Scene Check ===");
+
         Camera mainCamera = Camera.main;
-        Debug.Log(mainCamera != null ? "✅ 主相机存在" : "❌ 主相机不存在");
-        
-        // 检查控制器
+        Debug.Log(mainCamera != null ? "Main camera: OK" : "Main camera: Missing");
+
         FinalTapCat_Animated controller = FindObjectOfType<FinalTapCat_Animated>();
         if (controller != null)
         {
-            Debug.Log("✅ TapCat 控制器存在");
-            
-            // 检查猫咪对象
+            Debug.Log("TapCat controller: OK");
+
             GameObject cat = GameObject.Find("TapCat");
-            Debug.Log(cat != null ? "✅ 猫咪对象存在" : "❌ 猫咪对象不存在");
+            Debug.Log(cat != null ? "Cat object: OK" : "Cat object: Missing");
         }
         else
         {
-            Debug.Log("❌ TapCat 控制器不存在");
+            Debug.Log("TapCat controller: Missing");
         }
-        
-        // 检查资源
+
         string spritePath = Application.dataPath + "/Sprites/CatAnimation/";
         if (System.IO.Directory.Exists(spritePath))
         {
             int pngCount = System.IO.Directory.GetFiles(spritePath, "*.png").Length;
-            Debug.Log($"📸 动画资源: {pngCount}/10 帧");
+            Debug.Log($"Animation frames: {pngCount}/10");
         }
         else
         {
-            Debug.Log("❌ 动画资源目录不存在");
+            Debug.Log("Animation folder missing.");
         }
-        
-        Debug.Log("=== 检查完成 ===");
+
+        Debug.Log("=== Check Complete ===");
     }
 }

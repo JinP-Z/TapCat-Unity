@@ -1,22 +1,22 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 namespace TapCat
 {
     /// <summary>
-    /// TapCat2D测试脚本
-    /// 验证所有功能是否正常工作
+    /// Automated smoke tests for TapCat2D.
     /// </summary>
     public class TapCat2DTest : MonoBehaviour
     {
-        [Header("测试设置")]
+        [Header("Test Settings")]
         [SerializeField] private bool runAutomatedTests = true;
         [SerializeField] private float testDelay = 1.0f;
-        
+
         private TapCat2D tapCat2D;
         private TapCat2DSetup setup;
         private TapCat2DSceneSetup sceneSetup;
-        
+
         private void Start()
         {
             if (runAutomatedTests)
@@ -24,313 +24,239 @@ namespace TapCat
                 StartCoroutine(RunAllTests());
             }
         }
-        
-        /// <summary>
-        /// 运行所有测试
-        /// </summary>
+
         private IEnumerator RunAllTests()
         {
-            Debug.Log("=== 开始TapCat2D测试 ===");
-            
+            Debug.Log("=== TapCat2D Tests: Start ===");
+
             yield return new WaitForSeconds(testDelay);
-            
-            // 测试1：检查必要组件
             yield return StartCoroutine(TestEssentialComponents());
-            
+
             yield return new WaitForSeconds(testDelay);
-            
-            // 测试2：检查输入系统
             yield return StartCoroutine(TestInputSystem());
-            
+
             yield return new WaitForSeconds(testDelay);
-            
-            // 测试3：检查动画系统
             yield return StartCoroutine(TestAnimationSystem());
-            
+
             yield return new WaitForSeconds(testDelay);
-            
-            // 测试4：检查UI系统
             yield return StartCoroutine(TestUISystem());
-            
+
             yield return new WaitForSeconds(testDelay);
-            
-            // 测试5：检查重置功能
             yield return StartCoroutine(TestResetFunction());
-            
-            Debug.Log("=== TapCat2D测试完成 ===");
-            Debug.Log("所有测试通过！游戏已准备就绪。");
-            Debug.Log("控制说明：空格键/鼠标左键播放动画，R键重置");
+
+            Debug.Log("=== TapCat2D Tests: Complete ===");
+            Debug.Log("Controls: Space/Left Mouse = Play, R = Reset");
         }
-        
-        /// <summary>
-        /// 测试1：检查必要组件
-        /// </summary>
+
         private IEnumerator TestEssentialComponents()
         {
-            Debug.Log("测试1：检查必要组件...");
-            
-            // 查找TapCat2D组件
+            Debug.Log("Test 1: Essential components...");
+
             tapCat2D = FindObjectOfType<TapCat2D>();
             if (tapCat2D == null)
             {
-                Debug.LogError("✗ 未找到TapCat2D组件！");
+                Debug.LogError("TapCat2D component not found.");
                 yield break;
             }
-            Debug.Log("✓ 找到TapCat2D组件");
-            
-            // 查找TapCat2DSetup组件
+            Debug.Log("TapCat2D found.");
+
             setup = FindObjectOfType<TapCat2DSetup>();
             if (setup == null)
             {
-                Debug.LogWarning("⚠ 未找到TapCat2DSetup组件（可选）");
+                Debug.LogWarning("TapCat2DSetup not found (optional).");
             }
             else
             {
-                Debug.Log("✓ 找到TapCat2DSetup组件");
+                Debug.Log("TapCat2DSetup found.");
             }
-            
-            // 查找TapCat2DSceneSetup组件
+
             sceneSetup = FindObjectOfType<TapCat2DSceneSetup>();
             if (sceneSetup == null)
             {
-                Debug.LogWarning("⚠ 未找到TapCat2DSceneSetup组件（可选）");
+                Debug.LogWarning("TapCat2DSceneSetup not found (optional).");
             }
             else
             {
-                Debug.Log("✓ 找到TapCat2DSceneSetup组件");
+                Debug.Log("TapCat2DSceneSetup found.");
             }
-            
-            // 检查相机
+
             Camera mainCamera = Camera.main;
             if (mainCamera == null)
             {
-                Debug.LogError("✗ 未找到主相机！");
+                Debug.LogError("Main camera not found.");
                 yield break;
             }
-            
+
             if (!mainCamera.orthographic)
             {
-                Debug.LogWarning("⚠ 主相机不是正交相机，建议设置为Orthographic");
+                Debug.LogWarning("Main camera is not orthographic.");
             }
             else
             {
-                Debug.Log("✓ 主相机是正交相机");
+                Debug.Log("Main camera is orthographic.");
             }
-            
-            Debug.Log("✓ 测试1通过：必要组件检查完成");
+
+            Debug.Log("Test 1 complete.");
             yield return null;
         }
-        
-        /// <summary>
-        /// 测试2：检查输入系统
-        /// </summary>
+
         private IEnumerator TestInputSystem()
         {
-            Debug.Log("测试2：检查输入系统...");
-            
+            Debug.Log("Test 2: Input system...");
+
             if (tapCat2D == null)
             {
-                Debug.LogError("✗ 无法测试输入系统：TapCat2D组件为空");
+                Debug.LogError("TapCat2D is missing.");
                 yield break;
             }
-            
-            // 检查是否正在播放动画
-            bool isAnimating = tapCat2D.IsAnimating();
-            if (isAnimating)
+
+            if (tapCat2D.IsAnimating())
             {
-                Debug.Log("⚠ 动画正在播放，等待完成...");
+                Debug.Log("Animation running. Waiting to finish...");
                 while (tapCat2D.IsAnimating())
                 {
                     yield return null;
                 }
             }
-            
-            // 获取初始点击计数
+
             int initialCount = tapCat2D.GetTapCount();
-            Debug.Log($"初始点击计数: {initialCount}");
-            
-            // 模拟点击（调用公共方法）
             tapCat2D.StartCatAnimation();
             yield return new WaitForSeconds(0.1f);
-            
-            // 检查动画是否开始
+
             if (tapCat2D.IsAnimating())
             {
-                Debug.Log("✓ 输入系统：成功触发动画播放");
+                Debug.Log("Input triggered animation.");
             }
             else
             {
-                Debug.LogError("✗ 输入系统：未能触发动画播放");
+                Debug.LogError("Input did not trigger animation.");
             }
-            
-            // 等待动画完成
-            Debug.Log("等待动画完成...");
+
             while (tapCat2D.IsAnimating())
             {
                 yield return null;
             }
-            
-            // 检查点击计数是否增加
+
             int newCount = tapCat2D.GetTapCount();
             if (newCount > initialCount)
             {
-                Debug.Log($"✓ 点击计数已增加: {initialCount} -> {newCount}");
+                Debug.Log($"Tap count increased: {initialCount} -> {newCount}");
             }
             else
             {
-                Debug.LogError($"✗ 点击计数未增加: {initialCount} -> {newCount}");
+                Debug.LogError($"Tap count did not increase: {initialCount} -> {newCount}");
             }
-            
-            Debug.Log("✓ 测试2通过：输入系统检查完成");
+
+            Debug.Log("Test 2 complete.");
         }
-        
-        /// <summary>
-        /// 测试3：检查动画系统
-        /// </summary>
+
         private IEnumerator TestAnimationSystem()
         {
-            Debug.Log("测试3：检查动画系统...");
-            
+            Debug.Log("Test 3: Animation system...");
+
             if (tapCat2D == null)
             {
-                Debug.LogError("✗ 无法测试动画系统：TapCat2D组件为空");
+                Debug.LogError("TapCat2D is missing.");
                 yield break;
             }
-            
-            // 检查SpriteRenderer
+
             SpriteRenderer spriteRenderer = tapCat2D.GetComponent<SpriteRenderer>();
             if (spriteRenderer == null)
             {
-                Debug.LogError("✗ 未找到SpriteRenderer组件");
+                Debug.LogError("SpriteRenderer not found.");
                 yield break;
             }
-            Debug.Log("✓ 找到SpriteRenderer组件");
-            
-            // 检查动画帧
-            // 注意：由于catAnimationFrames是私有字段，我们无法直接访问
-            // 但我们可以通过观察动画播放来验证
-            
-            // 触发动画
-            int startCount = tapCat2D.GetTapCount();
+
             tapCat2D.StartCatAnimation();
-            
-            // 等待一小段时间检查动画状态
             yield return new WaitForSeconds(0.05f);
-            
+
             if (tapCat2D.IsAnimating())
             {
-                Debug.Log("✓ 动画系统：动画正在播放");
-                
-                // 等待完整动画
+                Debug.Log("Animation started.");
+
                 float animationTime = 0f;
                 while (tapCat2D.IsAnimating() && animationTime < 2.0f)
                 {
                     animationTime += Time.deltaTime;
                     yield return null;
                 }
-                
+
                 if (!tapCat2D.IsAnimating())
                 {
-                    Debug.Log("✓ 动画系统：动画正常完成");
+                    Debug.Log("Animation completed.");
                 }
                 else
                 {
-                    Debug.LogWarning("⚠ 动画系统：动画可能卡住");
+                    Debug.LogWarning("Animation taking longer than expected.");
                 }
             }
             else
             {
-                Debug.LogError("✗ 动画系统：未能开始动画");
+                Debug.LogError("Animation did not start.");
             }
-            
-            Debug.Log("✓ 测试3通过：动画系统检查完成");
+
+            Debug.Log("Test 3 complete.");
         }
-        
-        /// <summary>
-        /// 测试4：检查UI系统
-        /// </summary>
+
         private IEnumerator TestUISystem()
         {
-            Debug.Log("测试4：检查UI系统...");
-            
-            // 查找Canvas
+            Debug.Log("Test 4: UI system...");
+
             Canvas canvas = FindObjectOfType<Canvas>();
             if (canvas == null)
             {
-                Debug.LogWarning("⚠ 未找到Canvas（UI可能未创建）");
+                Debug.LogWarning("Canvas not found.");
             }
             else
             {
-                Debug.Log("✓ 找到Canvas");
-                
-                // 检查UI元素数量
                 int uiElementCount = canvas.transform.childCount;
-                if (uiElementCount > 0)
-                {
-                    Debug.Log($"✓ UI系统：找到{uiElementCount}个UI元素");
-                }
-                else
-                {
-                    Debug.LogWarning("⚠ UI系统：Canvas中没有子元素");
-                }
+                Debug.Log($"Canvas child count: {uiElementCount}");
             }
-            
-            // 检查Text组件
+
             Text[] textComponents = FindObjectsOfType<Text>();
             if (textComponents.Length > 0)
             {
-                Debug.Log($"✓ UI系统：找到{textComponents.Length}个Text组件");
+                Debug.Log($"Text components found: {textComponents.Length}");
             }
             else
             {
-                Debug.LogWarning("⚠ UI系统：未找到Text组件");
+                Debug.LogWarning("No Text components found.");
             }
-            
-            Debug.Log("✓ 测试4通过：UI系统检查完成");
+
+            Debug.Log("Test 4 complete.");
             yield return null;
         }
-        
-        /// <summary>
-        /// 测试5：检查重置功能
-        /// </summary>
+
         private IEnumerator TestResetFunction()
         {
-            Debug.Log("测试5：检查重置功能...");
-            
+            Debug.Log("Test 5: Reset function...");
+
             if (tapCat2D == null)
             {
-                Debug.LogError("✗ 无法测试重置功能：TapCat2D组件为空");
+                Debug.LogError("TapCat2D is missing.");
                 yield break;
             }
-            
-            // 记录当前状态
+
             int beforeResetCount = tapCat2D.GetTapCount();
-            Debug.Log($"重置前点击计数: {beforeResetCount}");
-            
-            // 执行重置
             tapCat2D.ResetGame();
             yield return new WaitForSeconds(0.5f);
-            
-            // 检查重置结果
+
             int afterResetCount = tapCat2D.GetTapCount();
             bool isAnimating = tapCat2D.IsAnimating();
-            
+
             if (afterResetCount == 0 && !isAnimating)
             {
-                Debug.Log("✓ 重置功能：成功重置点击计数和动画状态");
+                Debug.Log("Reset OK.");
             }
             else
             {
-                Debug.LogError($"✗ 重置功能：重置失败（计数:{afterResetCount}, 动画:{isAnimating}）");
+                Debug.LogError($"Reset failed. Count: {afterResetCount}, Animating: {isAnimating}");
             }
-            
-            Debug.Log("✓ 测试5通过：重置功能检查完成");
+
+            Debug.Log("Test 5 complete.");
         }
-        
-        /// <summary>
-        /// 手动运行测试
-        /// </summary>
-        [ContextMenu("运行手动测试")]
+
+        [ContextMenu("Run Manual Tests")]
         private void RunManualTest()
         {
             if (Application.isPlaying)
@@ -339,36 +265,32 @@ namespace TapCat
             }
             else
             {
-                Debug.Log("请在播放模式下运行测试");
+                Debug.Log("Run tests in Play Mode.");
             }
         }
-        
-        /// <summary>
-        /// 快速功能验证
-        /// </summary>
-        [ContextMenu("快速验证")]
+
+        [ContextMenu("Quick Validation")]
         private void QuickValidation()
         {
-            Debug.Log("=== TapCat2D快速验证 ===");
-            
-            // 检查核心组件
+            Debug.Log("=== TapCat2D Quick Validation ===");
+
             bool hasTapCat2D = FindObjectOfType<TapCat2D>() != null;
             bool hasCamera = Camera.main != null;
             bool hasCanvas = FindObjectOfType<Canvas>() != null;
-            
-            Debug.Log($"核心组件检查：");
-            Debug.Log($"- TapCat2D: {(hasTapCat2D ? "✓" : "✗")}");
-            Debug.Log($"- 主相机: {(hasCamera ? "✓" : "✗")}");
-            Debug.Log($"- Canvas: {(hasCanvas ? "✓" : "✗")}");
-            
+
+            Debug.Log("Core components:");
+            Debug.Log($"- TapCat2D: {(hasTapCat2D ? "OK" : "Missing")}");
+            Debug.Log($"- Main Camera: {(hasCamera ? "OK" : "Missing")}");
+            Debug.Log($"- Canvas: {(hasCanvas ? "OK" : "Missing")}");
+
             if (hasTapCat2D && hasCamera)
             {
-                Debug.Log("✓ 基本验证通过！");
-                Debug.Log("游戏可以运行，点击Play后按空格键测试动画");
+                Debug.Log("Basic validation passed.");
+                Debug.Log("Press Play and use Space to test animation.");
             }
             else
             {
-                Debug.LogError("✗ 验证失败：缺少必要组件");
+                Debug.LogError("Validation failed. Missing required components.");
             }
         }
     }
