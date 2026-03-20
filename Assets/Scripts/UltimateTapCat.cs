@@ -1,43 +1,43 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// 终极TapCat - 一个文件搞定一切
-/// 100%无错误，100%能运行
+/// 缁堟瀬TapCat - 涓€涓枃浠舵悶瀹氫竴鍒?
+/// 100%鏃犻敊璇紝100%鑳借繍琛?
 /// </summary>
 public class UltimateTapCat : MonoBehaviour
 {
-    // 猫咪设置
+    // 鐚挭璁剧疆
     public Color catColor = Color.yellow;
     public float catSize = 3f;
     
-    // UI设置
+    // UI璁剧疆
     public Vector2 uiPosition = new Vector2(-20, -20);
     
-    // 私有变量
+    // 绉佹湁鍙橀噺
     private GameObject catObject;
     private TextMeshProUGUI countText;
     private int tapCount = 0;
     
     void Start()
     {
-        Debug.Log("=== 终极TapCat启动 ===");
+        Debug.Log("=== 缁堟瀬TapCat鍚姩 ===");
         CreateCat();
         CreateUI();
-        Debug.Log("=== 设置完成 ===");
-        Debug.Log("按空格键或点击鼠标测试！");
+        Debug.Log("=== 璁剧疆瀹屾垚 ===");
+        Debug.Log("鎸夌┖鏍奸敭鎴栫偣鍑婚紶鏍囨祴璇曪紒");
     }
     
     void Update()
     {
-        // 检测点击
+        // 妫€娴嬬偣鍑?
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
             OnTap();
         }
         
-        // 自动旋转
+        // 鑷姩鏃嬭浆
         if (catObject != null)
         {
             catObject.transform.Rotate(0, 30f * Time.deltaTime, 0);
@@ -45,35 +45,35 @@ public class UltimateTapCat : MonoBehaviour
     }
     
     /// <summary>
-    /// 创建猫咪
+    /// 鍒涘缓鐚挭
     /// </summary>
     void CreateCat()
     {
-        // 删除旧的猫咪
+        // 鍒犻櫎鏃х殑鐚挭
         if (catObject != null) Destroy(catObject);
         
-        // 创建新的猫咪（使用Cube）
+        // 鍒涘缓鏂扮殑鐚挭锛堜娇鐢–ube锛?
         catObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
         catObject.name = "TapCat";
         catObject.transform.position = Vector3.zero;
         catObject.transform.localScale = new Vector3(catSize, catSize, 0.1f);
         
-        // 设置颜色
+        // 璁剧疆棰滆壊
         Renderer renderer = catObject.GetComponent<Renderer>();
         if (renderer != null)
         {
             renderer.material.color = catColor;
         }
         
-        Debug.Log("猫咪创建完成");
+        Debug.Log("鐚挭鍒涘缓瀹屾垚");
     }
     
     /// <summary>
-    /// 创建UI
+    /// 鍒涘缓UI
     /// </summary>
     void CreateUI()
     {
-        // 创建Canvas（如果不存在）
+        // 鍒涘缓Canvas锛堝鏋滀笉瀛樺湪锛?
         Canvas canvas = FindObjectOfType<Canvas>();
         if (canvas == null)
         {
@@ -84,11 +84,11 @@ public class UltimateTapCat : MonoBehaviour
             canvasObj.AddComponent<GraphicRaycaster>();
         }
         
-        // 创建UI容器
+        // 鍒涘缓UI瀹瑰櫒
         GameObject uiContainer = new GameObject("TapCounter");
         uiContainer.transform.SetParent(canvas.transform);
         
-        // 设置位置
+        // 璁剧疆浣嶇疆
         RectTransform rect = uiContainer.AddComponent<RectTransform>();
         rect.anchorMin = new Vector2(1, 1);
         rect.anchorMax = new Vector2(1, 1);
@@ -96,7 +96,7 @@ public class UltimateTapCat : MonoBehaviour
         rect.anchoredPosition = uiPosition;
         rect.sizeDelta = new Vector2(200, 80);
         
-        // 添加背景
+        // 娣诲姞鑳屾櫙
         GameObject bg = new GameObject("Background");
         bg.transform.SetParent(uiContainer.transform);
         RectTransform bgRect = bg.AddComponent<RectTransform>();
@@ -107,7 +107,7 @@ public class UltimateTapCat : MonoBehaviour
         Image bgImage = bg.AddComponent<Image>();
         bgImage.color = new Color(0, 0, 0, 0.7f);
         
-        // 添加计数文本
+        // 娣诲姞璁℃暟鏂囨湰
         GameObject textObj = new GameObject("CountText");
         textObj.transform.SetParent(uiContainer.transform);
         RectTransform textRect = textObj.AddComponent<RectTransform>();
@@ -117,29 +117,29 @@ public class UltimateTapCat : MonoBehaviour
         textRect.sizeDelta = Vector2.zero;
         
         countText = textObj.AddComponent<TextMeshProUGUI>();
-        countText.text = "点击: 0";
+        countText.text = "鐐瑰嚮: 0";
         countText.fontSize = 24;
         countText.color = Color.white;
         countText.alignment = TextAlignmentOptions.Center;
         
-        Debug.Log("UI创建完成");
+        Debug.Log("UI鍒涘缓瀹屾垚");
     }
     
     /// <summary>
-    /// 点击处理
+    /// 鐐瑰嚮澶勭悊
     /// </summary>
     void OnTap()
     {
         tapCount++;
-        Debug.Log($"点击！次数: {tapCount}");
+        Debug.Log($"鐐瑰嚮锛佹鏁? {tapCount}");
         
-        // 更新UI
+        // 鏇存柊UI
         if (countText != null)
         {
-            countText.text = $"点击: {tapCount}";
+            countText.text = $"鐐瑰嚮: {tapCount}";
         }
         
-        // 改变猫咪颜色
+        // 鏀瑰彉鐚挭棰滆壊
         if (catObject != null)
         {
             Renderer renderer = catObject.GetComponent<Renderer>();
@@ -153,34 +153,34 @@ public class UltimateTapCat : MonoBehaviour
                 );
                 renderer.material.color = newColor;
                 
-                // 快速旋转
+                // 蹇€熸棆杞?
                 catObject.transform.Rotate(0, 180, 0);
             }
         }
     }
     
     /// <summary>
-    /// 编辑器工具：一键测试
+    /// 缂栬緫鍣ㄥ伐鍏凤細涓€閿祴璇?
     /// </summary>
-    [ContextMenu("一键测试")]
+    [ContextMenu("One Click Test")]
     void TestInEditor()
     {
         CreateCat();
         CreateUI();
-        Debug.Log("测试完成！");
+        Debug.Log("Test complete.");
     }
     
-    [ContextMenu("重置计数器")]
+    [ContextMenu("Reset Counter")]
     void ResetCounter()
     {
         tapCount = 0;
         if (countText != null)
         {
-            countText.text = "点击: 0";
+            countText.text = "鐐瑰嚮: 0";
         }
     }
     
-    [ContextMenu("改变猫咪颜色")]
+    [ContextMenu("鏀瑰彉鐚挭棰滆壊")]
     void ChangeCatColor()
     {
         if (catObject != null)

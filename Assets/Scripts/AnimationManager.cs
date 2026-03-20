@@ -1,23 +1,23 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TapCat
 {
     /// <summary>
-    /// 动画管理器
-    /// 负责管理猫咪的动画状态和过渡
+    /// 鍔ㄧ敾绠＄悊鍣?
+    /// 璐熻矗绠＄悊鐚挭鐨勫姩鐢荤姸鎬佸拰杩囨浮
     /// </summary>
     public class AnimationManager : MonoBehaviour
     {
-        [Header("动画引用")]
+        [Header("鍔ㄧ敾寮曠敤")]
         [SerializeField] private Animator catAnimator;
         
-        [Header("动画参数")]
+        [Header("鍔ㄧ敾鍙傛暟")]
         [SerializeField] private string idleStateName = "Idle";
         [SerializeField] private string tapDanceStateName = "TapDance";
         [SerializeField] private string tapTriggerName = "Tap";
         [SerializeField] private string isTapDancingParam = "IsTapDancing";
         
-        [Header("动画设置")]
+        [Header("鍔ㄧ敾璁剧疆")]
         [SerializeField] private float idleToDanceTransitionTime = 0.2f;
         [SerializeField] private float danceToIdleTransitionTime = 0.5f;
         
@@ -28,55 +28,55 @@ namespace TapCat
                 catAnimator = GetComponent<Animator>();
             }
             
-            // 确保动画控制器存在
+            // 纭繚鍔ㄧ敾鎺у埗鍣ㄥ瓨鍦?
             if (catAnimator == null)
             {
-                Debug.LogWarning("AnimationManager: 未找到Animator组件");
+                Debug.LogWarning("AnimationManager: 鏈壘鍒癆nimator缁勪欢");
             }
             else
             {
-                Debug.Log("AnimationManager: 动画系统初始化完成");
+                Debug.Log("AnimationManager: initialized.");
             }
         }
         
         /// <summary>
-        /// 播放点击动画
+        /// 鎾斁鐐瑰嚮鍔ㄧ敾
         /// </summary>
         public void PlayTapAnimation()
         {
             if (catAnimator != null)
             {
                 catAnimator.SetTrigger(tapTriggerName);
-                Debug.Log("播放点击动画");
+                Debug.Log("鎾斁鐐瑰嚮鍔ㄧ敾");
             }
         }
         
         /// <summary>
-        /// 开始踢踏舞
+        /// 寮€濮嬭涪韪忚垶
         /// </summary>
         public void StartTapDance()
         {
             if (catAnimator != null)
             {
                 catAnimator.SetBool(isTapDancingParam, true);
-                Debug.Log("开始踢踏舞动画");
+                Debug.Log("寮€濮嬭涪韪忚垶鍔ㄧ敾");
             }
         }
         
         /// <summary>
-        /// 停止踢踏舞
+        /// 鍋滄韪㈣笍鑸?
         /// </summary>
         public void StopTapDance()
         {
             if (catAnimator != null)
             {
                 catAnimator.SetBool(isTapDancingParam, false);
-                Debug.Log("停止踢踏舞动画");
+                Debug.Log("Stop tap dance animation.");
             }
         }
         
         /// <summary>
-        /// 检查是否在播放踢踏舞动画
+        /// 妫€鏌ユ槸鍚﹀湪鎾斁韪㈣笍鑸炲姩鐢?
         /// </summary>
         public bool IsTapDancing()
         {
@@ -88,7 +88,7 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 获取当前动画状态
+        /// 鑾峰彇褰撳墠鍔ㄧ敾鐘舵€?
         /// </summary>
         public string GetCurrentState()
         {
@@ -108,19 +108,19 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 设置动画速度
+        /// 璁剧疆鍔ㄧ敾閫熷害
         /// </summary>
         public void SetAnimationSpeed(float speed)
         {
             if (catAnimator != null)
             {
                 catAnimator.speed = speed;
-                Debug.Log($"动画速度设置为: {speed}");
+                Debug.Log($"鍔ㄧ敾閫熷害璁剧疆涓? {speed}");
             }
         }
         
         /// <summary>
-        /// 重置动画速度
+        /// 閲嶇疆鍔ㄧ敾閫熷害
         /// </summary>
         public void ResetAnimationSpeed()
         {

@@ -1,23 +1,23 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// 自动设置工具 - 在Unity启动时自动设置场景
+/// 鑷姩璁剧疆宸ュ叿 - 鍦║nity鍚姩鏃惰嚜鍔ㄨ缃満鏅?
 /// </summary>
 public class AutoSetup : MonoBehaviour
 {
-    [Header("自动设置")]
+    [Header("鑷姩璁剧疆")]
     public bool runOnStart = true;
     public bool createCat = true;
     public bool createUI = true;
     
-    [Header("猫咪设置")]
-    public Color catColor = new Color(1f, 0.5f, 0f, 1f); // 橙色
+    [Header("鐚挭璁剧疆")]
+    public Color catColor = new Color(1f, 0.5f, 0f, 1f); // 姗欒壊
     public Vector3 catPosition = Vector3.zero;
     public Vector3 catScale = new Vector3(2f, 2f, 1f);
     
-    [Header("UI设置")]
+    [Header("UI璁剧疆")]
     public Vector2 uiPosition = new Vector2(-20f, -20f);
     
     private GameObject tapCatObject;
@@ -26,88 +26,88 @@ public class AutoSetup : MonoBehaviour
     {
         if (runOnStart)
         {
-            Debug.Log("=== 虾宝自动设置开始 ===");
+            Debug.Log("=== 铏惧疂鑷姩璁剧疆寮€濮?===");
             AutoSetupScene();
-            Debug.Log("=== 虾宝自动设置完成 ===");
+            Debug.Log("=== 铏惧疂鑷姩璁剧疆瀹屾垚 ===");
         }
     }
     
     /// <summary>
-    /// 自动设置场景
+    /// 鑷姩璁剧疆鍦烘櫙
     /// </summary>
     public void AutoSetupScene()
     {
-        Debug.Log("虾宝开始自动设置TapCat场景...");
+        Debug.Log("铏惧疂寮€濮嬭嚜鍔ㄨ缃甌apCat鍦烘櫙...");
         
-        // 1. 设置猫咪
+        // 1. 璁剧疆鐚挭
         if (createCat)
         {
             SetupCat();
         }
         
-        // 2. 设置UI
+        // 2. 璁剧疆UI
         if (createUI)
         {
             SetupUI();
         }
         
-        // 3. 添加简单动画
+        // 3. 娣诲姞绠€鍗曞姩鐢?
         AddSimpleAnimation();
         
-        Debug.Log("虾宝自动设置完成！");
-        Debug.Log("猫咪应该显示在屏幕中央了！");
-        Debug.Log("点击空格键或鼠标让猫咪跳舞！");
+        Debug.Log("Auto setup complete.");
+        Debug.Log("TapCat should be visible at screen center.");
+        Debug.Log("鐐瑰嚮绌烘牸閿垨榧犳爣璁╃尗鍜烦鑸烇紒");
     }
     
     /// <summary>
-    /// 设置猫咪
+    /// 璁剧疆鐚挭
     /// </summary>
     private void SetupCat()
     {
-        Debug.Log("设置猫咪...");
+        Debug.Log("璁剧疆鐚挭...");
         
-        // 查找或创建猫咪对象
+        // 鏌ユ壘鎴栧垱寤虹尗鍜璞?
         tapCatObject = GameObject.Find("TapCat");
         if (tapCatObject == null)
         {
             tapCatObject = new GameObject("TapCat");
-            Debug.Log("创建TapCat对象");
+            Debug.Log("鍒涘缓TapCat瀵硅薄");
         }
         
-        // 设置位置和缩放
+        // 璁剧疆浣嶇疆鍜岀缉鏀?
         tapCatObject.transform.position = catPosition;
         tapCatObject.transform.localScale = catScale;
         
-        // 确保有SpriteRenderer
+        // 纭繚鏈塖priteRenderer
         SpriteRenderer spriteRenderer = tapCatObject.GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
         {
             spriteRenderer = tapCatObject.AddComponent<SpriteRenderer>();
-            Debug.Log("添加SpriteRenderer组件");
+            Debug.Log("娣诲姞SpriteRenderer缁勪欢");
         }
         
-        // 设置颜色
+        // 璁剧疆棰滆壊
         spriteRenderer.color = catColor;
-        Debug.Log($"设置猫咪颜色: {catColor}");
+        Debug.Log($"璁剧疆鐚挭棰滆壊: {catColor}");
         
-        // 添加简单控制器
+        // 娣诲姞绠€鍗曟帶鍒跺櫒
         if (tapCatObject.GetComponent<SimpleCatController>() == null)
         {
             tapCatObject.AddComponent<SimpleCatController>();
-            Debug.Log("添加SimpleCatController");
+            Debug.Log("娣诲姞SimpleCatController");
         }
         
-        Debug.Log("猫咪设置完成");
+        Debug.Log("鐚挭璁剧疆瀹屾垚");
     }
     
     /// <summary>
-    /// 设置UI
+    /// 璁剧疆UI
     /// </summary>
     private void SetupUI()
     {
-        Debug.Log("设置UI...");
+        Debug.Log("璁剧疆UI...");
         
-        // 查找或创建Canvas
+        // 鏌ユ壘鎴栧垱寤篊anvas
         Canvas canvas = FindObjectOfType<Canvas>();
         if (canvas == null)
         {
@@ -116,14 +116,14 @@ public class AutoSetup : MonoBehaviour
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvasObj.AddComponent<CanvasScaler>();
             canvasObj.AddComponent<GraphicRaycaster>();
-            Debug.Log("创建Canvas");
+            Debug.Log("鍒涘缓Canvas");
         }
         
-        // 创建UI容器
+        // 鍒涘缓UI瀹瑰櫒
         GameObject uiContainer = new GameObject("TapCounterUI");
         uiContainer.transform.SetParent(canvas.transform);
         
-        // 设置位置和大小
+        // 璁剧疆浣嶇疆鍜屽ぇ灏?
         RectTransform rectTransform = uiContainer.AddComponent<RectTransform>();
         rectTransform.anchorMin = new Vector2(1, 1);
         rectTransform.anchorMax = new Vector2(1, 1);
@@ -131,7 +131,7 @@ public class AutoSetup : MonoBehaviour
         rectTransform.anchoredPosition = uiPosition;
         rectTransform.sizeDelta = new Vector2(200, 80);
         
-        // 添加背景
+        // 娣诲姞鑳屾櫙
         GameObject background = new GameObject("Background");
         background.transform.SetParent(uiContainer.transform);
         RectTransform bgRect = background.AddComponent<RectTransform>();
@@ -142,7 +142,7 @@ public class AutoSetup : MonoBehaviour
         Image bgImage = background.AddComponent<Image>();
         bgImage.color = new Color(0.1f, 0.1f, 0.1f, 0.8f);
         
-        // 添加点击次数文本
+        // 娣诲姞鐐瑰嚮娆℃暟鏂囨湰
         GameObject countTextObj = new GameObject("TapCountText");
         countTextObj.transform.SetParent(uiContainer.transform);
         RectTransform countRect = countTextObj.AddComponent<RectTransform>();
@@ -152,112 +152,40 @@ public class AutoSetup : MonoBehaviour
         countRect.sizeDelta = Vector2.zero;
         
         TextMeshProUGUI countText = countTextObj.AddComponent<TextMeshProUGUI>();
-        countText.text = "点击次数: 0";
+        countText.text = "鐐瑰嚮娆℃暟: 0";
         countText.fontSize = 24;
         countText.color = Color.white;
         countText.alignment = TextAlignmentOptions.Center;
         
-        Debug.Log("UI设置完成");
+        Debug.Log("UI璁剧疆瀹屾垚");
     }
     
     /// <summary>
-    /// 添加简单动画
+    /// 娣诲姞绠€鍗曞姩鐢?
     /// </summary>
     private void AddSimpleAnimation()
     {
-        Debug.Log("添加简单动画...");
+        Debug.Log("娣诲姞绠€鍗曞姩鐢?..");
         
-        // 添加旋转组件
+        // 娣诲姞鏃嬭浆缁勪欢
         if (tapCatObject != null && tapCatObject.GetComponent<SimpleRotator>() == null)
         {
             tapCatObject.AddComponent<SimpleRotator>();
-            Debug.Log("添加SimpleRotator动画");
+            Debug.Log("娣诲姞SimpleRotator鍔ㄧ敾");
         }
         
-        Debug.Log("动画设置完成");
+        Debug.Log("鍔ㄧ敾璁剧疆瀹屾垚");
     }
     
     /// <summary>
-    /// 编辑器工具：一键设置
+    /// 缂栬緫鍣ㄥ伐鍏凤細涓€閿缃?
     /// </summary>
-    [ContextMenu("虾宝一键设置")]
+    [ContextMenu("One Click Setup")]
     private void OneClickSetup()
     {
         AutoSetupScene();
     }
 }
-
-/// <summary>
-    /// 简单猫咪控制器
-/// </summary>
-public class SimpleCatController : MonoBehaviour
-{
-    private int tapCount = 0;
-    private float rotationSpeed = 0f;
-    private SpriteRenderer spriteRenderer;
-    
-    void Start()
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        Debug.Log("SimpleCatController启动");
-    }
-    
-    void Update()
-    {
-        // 检测点击
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
-        {
-            OnTap();
-        }
-        
-        // 旋转动画
-        if (rotationSpeed > 0)
-        {
-            transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
-        }
-    }
-    
-    void OnTap()
-    {
-        tapCount++;
-        Debug.Log($"点击！次数: {tapCount}");
-        
-        // 改变颜色
-        if (spriteRenderer != null)
-        {
-            Color randomColor = new Color(
-                Random.Range(0.5f, 1f),
-                Random.Range(0.5f, 1f),
-                Random.Range(0.5f, 1f),
-                1f
-            );
-            spriteRenderer.color = randomColor;
-        }
-        
-        // 增加旋转速度
-        rotationSpeed = 180f;
-        
-        // 更新UI（如果存在）
-        UpdateUI();
-    }
-    
-    void UpdateUI()
-    {
-        GameObject uiText = GameObject.Find("TapCountText");
-        if (uiText != null)
-        {
-            TextMeshProUGUI textComponent = uiText.GetComponent<TextMeshProUGUI>();
-            if (textComponent != null)
-            {
-                textComponent.text = $"点击次数: {tapCount}";
-            }
-        }
-    }
-}
-
-/// <summary>
-/// 简单旋转组件
-/// </summary>
 public class SimpleRotator : MonoBehaviour
 {
     public float baseRotationSpeed = 30f;

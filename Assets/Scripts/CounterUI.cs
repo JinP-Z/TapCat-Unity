@@ -1,32 +1,32 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 namespace TapCat
 {
     /// <summary>
-    /// 计数器UI
-    /// 负责显示点击次数和状态信息
+    /// 璁℃暟鍣║I
+    /// 璐熻矗鏄剧ず鐐瑰嚮娆℃暟鍜岀姸鎬佷俊鎭?
     /// </summary>
     public class CounterUI : MonoBehaviour
     {
-        // 单例实例
+        // 鍗曚緥瀹炰緥
         public static CounterUI Instance { get; private set; }
         
-        [Header("UI引用")]
+        [Header("UI寮曠敤")]
         [SerializeField] private TextMeshProUGUI tapCountText;
         [SerializeField] private TextMeshProUGUI statusText;
         [SerializeField] private Image backgroundPanel;
         [SerializeField] private GameObject uiContainer;
         
-        [Header("UI设置")]
+        [Header("UI璁剧疆")]
         [SerializeField] private Color normalColor = new Color(0.1f, 0.1f, 0.1f, 0.8f);
         [SerializeField] private Color highlightColor = new Color(0.2f, 0.4f, 0.8f, 0.9f);
         [SerializeField] private float highlightDuration = 0.3f;
         
-        [Header("文本格式")]
-        [SerializeField] private string tapCountFormat = "点击次数: {0}";
-        [SerializeField] private string statusFormat = "状态: {0}";
+        [Header("鏂囨湰鏍煎紡")]
+        [SerializeField] private string tapCountFormat = "鐐瑰嚮娆℃暟: {0}";
+        [SerializeField] private string statusFormat = "鐘舵€? {0}";
         
         private TapCatController tapCatController;
         private float highlightTimer = 0f;
@@ -34,7 +34,7 @@ namespace TapCat
         
         private void Awake()
         {
-            // 设置单例
+            // 璁剧疆鍗曚緥
             if (Instance == null)
             {
                 Instance = this;
@@ -45,25 +45,25 @@ namespace TapCat
                 return;
             }
             
-            // 获取TapCatController引用
+            // 鑾峰彇TapCatController寮曠敤
             tapCatController = FindObjectOfType<TapCatController>();
             
-            // 初始化UI
+            // 鍒濆鍖朥I
             InitializeUI();
         }
         
         private void Start()
         {
-            // 初始显示
+            // 鍒濆鏄剧ず
             UpdateTapCount(0);
-            UpdateStatus("等待输入...");
+            UpdateStatus("绛夊緟杈撳叆...");
             
-            Debug.Log("CounterUI: UI系统初始化完成");
+            Debug.Log("CounterUI: UI initialized.");
         }
         
         private void Update()
         {
-            // 处理高亮效果
+            // 澶勭悊楂樹寒鏁堟灉
             if (isHighlighted)
             {
                 highlightTimer -= Time.deltaTime;
@@ -73,7 +73,7 @@ namespace TapCat
                 }
             }
             
-            // 自动更新点击次数（如果tapCatController存在）
+            // 鑷姩鏇存柊鐐瑰嚮娆℃暟锛堝鏋渢apCatController瀛樺湪锛?
             if (tapCatController != null)
             {
                 UpdateTapCount(tapCatController.GetTapCount());
@@ -81,18 +81,18 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 初始化UI
+        /// 鍒濆鍖朥I
         /// </summary>
         private void InitializeUI()
         {
-            // 确保UI元素存在
+            // 纭繚UI鍏冪礌瀛樺湪
             if (tapCountText == null || statusText == null)
             {
-                Debug.LogWarning("CounterUI: 部分UI元素未设置，将尝试自动查找");
+                Debug.LogWarning("CounterUI: Some UI references missing; attempting auto-find.");
                 FindUIElements();
             }
             
-            // 设置初始颜色
+            // 璁剧疆鍒濆棰滆壊
             if (backgroundPanel != null)
             {
                 backgroundPanel.color = normalColor;
@@ -100,11 +100,11 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 查找UI元素
+        /// 鏌ユ壘UI鍏冪礌
         /// </summary>
         private void FindUIElements()
         {
-            // 在子对象中查找
+            // 鍦ㄥ瓙瀵硅薄涓煡鎵?
             TextMeshProUGUI[] texts = GetComponentsInChildren<TextMeshProUGUI>();
             foreach (var text in texts)
             {
@@ -118,7 +118,7 @@ namespace TapCat
                 }
             }
             
-            // 查找背景面板
+            // 鏌ユ壘鑳屾櫙闈㈡澘
             if (backgroundPanel == null)
             {
                 backgroundPanel = GetComponentInChildren<Image>();
@@ -126,7 +126,7 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 更新点击次数显示
+        /// 鏇存柊鐐瑰嚮娆℃暟鏄剧ず
         /// </summary>
         public void UpdateTapCount(int count)
         {
@@ -134,7 +134,7 @@ namespace TapCat
             {
                 tapCountText.text = string.Format(tapCountFormat, count);
                 
-                // 当点击次数增加时高亮
+                // 褰撶偣鍑绘鏁板鍔犳椂楂樹寒
                 if (count > 0)
                 {
                     HighlightBackground();
@@ -143,7 +143,7 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 更新状态显示
+        /// 鏇存柊鐘舵€佹樉绀?
         /// </summary>
         public void UpdateStatus(string status)
         {
@@ -154,7 +154,7 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 高亮背景
+        /// 楂樹寒鑳屾櫙
         /// </summary>
         public void HighlightBackground()
         {
@@ -167,7 +167,7 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 重置背景颜色
+        /// 閲嶇疆鑳屾櫙棰滆壊
         /// </summary>
         public void ResetBackgroundColor()
         {
@@ -179,7 +179,7 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 显示/隐藏UI
+        /// 鏄剧ず/闅愯棌UI
         /// </summary>
         public void SetUIVisible(bool visible)
         {
@@ -190,7 +190,7 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 切换UI显示
+        /// 鍒囨崲UI鏄剧ず
         /// </summary>
         public void ToggleUI()
         {
@@ -198,12 +198,12 @@ namespace TapCat
             {
                 bool newState = !uiContainer.activeSelf;
                 uiContainer.SetActive(newState);
-                Debug.Log($"UI显示状态: {newState}");
+                Debug.Log($"UI鏄剧ず鐘舵€? {newState}");
             }
         }
         
         /// <summary>
-        /// 设置UI透明度
+        /// 璁剧疆UI閫忔槑搴?
         /// </summary>
         public void SetUIOpacity(float opacity)
         {
@@ -230,7 +230,7 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 获取当前点击次数
+        /// 鑾峰彇褰撳墠鐐瑰嚮娆℃暟
         /// </summary>
         public int GetCurrentTapCount()
         {

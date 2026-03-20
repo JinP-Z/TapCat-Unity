@@ -1,26 +1,26 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
-/// 测试编译脚本
+/// 娴嬭瘯缂栬瘧鑴氭湰
 /// </summary>
 public class TestCompile : MonoBehaviour
 {
     void Start()
     {
-        Debug.Log("测试编译脚本启动成功！");
+        Debug.Log("Test compile script started.");
         
-        // 测试SimpleCatController是否存在
+        // 娴嬭瘯SimpleCatController鏄惁瀛樺湪
         System.Type type = System.Type.GetType("SimpleCatController");
         if (type != null)
         {
-            Debug.Log("SimpleCatController类存在");
+            Debug.Log("SimpleCatController class found.");
         }
         else
         {
-            Debug.LogError("SimpleCatController类不存在或命名空间有问题");
+            Debug.LogError("SimpleCatController绫讳笉瀛樺湪鎴栧懡鍚嶇┖闂存湁闂");
         }
         
-        // 测试其他关键类
+        // 娴嬭瘯鍏朵粬鍏抽敭绫?
         TestClass("TapCatController");
         TestClass("AnimationManager");
         TestClass("InputHandler");
@@ -32,11 +32,11 @@ public class TestCompile : MonoBehaviour
         System.Type type = System.Type.GetType(className);
         if (type != null)
         {
-            Debug.Log($"{className}类存在");
+            Debug.Log($"{className} class found.");
         }
         else
         {
-            Debug.LogError($"{className}类不存在");
+            Debug.LogError($"{className}绫讳笉瀛樺湪");
         }
     }
 }

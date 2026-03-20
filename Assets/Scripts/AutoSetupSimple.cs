@@ -1,22 +1,22 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// 超级简单的自动设置工具
-/// 只有一个文件，没有依赖问题
+/// 瓒呯骇绠€鍗曠殑鑷姩璁剧疆宸ュ叿
+/// 鍙湁涓€涓枃浠讹紝娌℃湁渚濊禆闂
 /// </summary>
 public class AutoSetupSimple : MonoBehaviour
 {
-    [Header("自动设置")]
+    [Header("鑷姩璁剧疆")]
     public bool runOnStart = true;
     
-    [Header("猫咪设置")]
-    public Color catColor = new Color(1f, 0.5f, 0f, 1f); // 橙色
+    [Header("鐚挭璁剧疆")]
+    public Color catColor = new Color(1f, 0.5f, 0f, 1f); // 姗欒壊
     public Vector3 catPosition = Vector3.zero;
     public Vector3 catScale = new Vector3(2f, 2f, 1f);
     
-    [Header("UI设置")]
+    [Header("UI璁剧疆")]
     public Vector2 uiPosition = new Vector2(-20f, -20f);
     
     private GameObject tapCatObject;
@@ -26,71 +26,71 @@ public class AutoSetupSimple : MonoBehaviour
     {
         if (runOnStart)
         {
-            Debug.Log("=== 虾宝超级简单自动设置开始 ===");
+            Debug.Log("=== 铏惧疂瓒呯骇绠€鍗曡嚜鍔ㄨ缃紑濮?===");
             SetupEverything();
-            Debug.Log("=== 虾宝自动设置完成 ===");
+            Debug.Log("=== 铏惧疂鑷姩璁剧疆瀹屾垚 ===");
         }
     }
     
     /// <summary>
-    /// 设置一切
+    /// 璁剧疆涓€鍒?
     /// </summary>
     public void SetupEverything()
     {
-        Debug.Log("虾宝开始设置...");
+        Debug.Log("铏惧疂寮€濮嬭缃?..");
         
-        // 1. 设置猫咪
+        // 1. 璁剧疆鐚挭
         SetupCat();
         
-        // 2. 设置UI
+        // 2. 璁剧疆UI
         SetupUI();
         
-        Debug.Log("设置完成！");
-        Debug.Log("按空格键或点击鼠标测试！");
+        Debug.Log("Setup complete.");
+        Debug.Log("鎸夌┖鏍奸敭鎴栫偣鍑婚紶鏍囨祴璇曪紒");
     }
     
     /// <summary>
-    /// 设置猫咪
+    /// 璁剧疆鐚挭
     /// </summary>
     private void SetupCat()
     {
-        Debug.Log("设置猫咪...");
+        Debug.Log("璁剧疆鐚挭...");
         
-        // 查找或创建猫咪对象
+        // 鏌ユ壘鎴栧垱寤虹尗鍜璞?
         tapCatObject = GameObject.Find("TapCat");
         if (tapCatObject == null)
         {
             tapCatObject = new GameObject("TapCat");
-            Debug.Log("创建TapCat对象");
+            Debug.Log("鍒涘缓TapCat瀵硅薄");
         }
         
-        // 设置位置和缩放
+        // 璁剧疆浣嶇疆鍜岀缉鏀?
         tapCatObject.transform.position = catPosition;
         tapCatObject.transform.localScale = catScale;
         
-        // 确保有SpriteRenderer
+        // 纭繚鏈塖priteRenderer
         SpriteRenderer spriteRenderer = tapCatObject.GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
         {
             spriteRenderer = tapCatObject.AddComponent<SpriteRenderer>();
-            Debug.Log("添加SpriteRenderer组件");
+            Debug.Log("娣诲姞SpriteRenderer缁勪欢");
         }
         
-        // 设置颜色
+        // 璁剧疆棰滆壊
         spriteRenderer.color = catColor;
-        Debug.Log($"设置猫咪颜色: {catColor}");
+        Debug.Log($"璁剧疆鐚挭棰滆壊: {catColor}");
         
-        Debug.Log("猫咪设置完成");
+        Debug.Log("鐚挭璁剧疆瀹屾垚");
     }
     
     /// <summary>
-    /// 设置UI
+    /// 璁剧疆UI
     /// </summary>
     private void SetupUI()
     {
-        Debug.Log("设置UI...");
+        Debug.Log("璁剧疆UI...");
         
-        // 查找或创建Canvas
+        // 鏌ユ壘鎴栧垱寤篊anvas
         Canvas canvas = FindObjectOfType<Canvas>();
         if (canvas == null)
         {
@@ -99,14 +99,14 @@ public class AutoSetupSimple : MonoBehaviour
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvasObj.AddComponent<CanvasScaler>();
             canvasObj.AddComponent<GraphicRaycaster>();
-            Debug.Log("创建Canvas");
+            Debug.Log("鍒涘缓Canvas");
         }
         
-        // 创建UI容器
+        // 鍒涘缓UI瀹瑰櫒
         GameObject uiContainer = new GameObject("TapCounterUI");
         uiContainer.transform.SetParent(canvas.transform);
         
-        // 设置位置和大小
+        // 璁剧疆浣嶇疆鍜屽ぇ灏?
         RectTransform rectTransform = uiContainer.AddComponent<RectTransform>();
         rectTransform.anchorMin = new Vector2(1, 1);
         rectTransform.anchorMax = new Vector2(1, 1);
@@ -114,7 +114,7 @@ public class AutoSetupSimple : MonoBehaviour
         rectTransform.anchoredPosition = uiPosition;
         rectTransform.sizeDelta = new Vector2(200, 80);
         
-        // 添加背景
+        // 娣诲姞鑳屾櫙
         GameObject background = new GameObject("Background");
         background.transform.SetParent(uiContainer.transform);
         RectTransform bgRect = background.AddComponent<RectTransform>();
@@ -125,7 +125,7 @@ public class AutoSetupSimple : MonoBehaviour
         Image bgImage = background.AddComponent<Image>();
         bgImage.color = new Color(0.1f, 0.1f, 0.1f, 0.8f);
         
-        // 添加点击次数文本
+        // 娣诲姞鐐瑰嚮娆℃暟鏂囨湰
         GameObject countTextObj = new GameObject("TapCountText");
         countTextObj.transform.SetParent(uiContainer.transform);
         RectTransform countRect = countTextObj.AddComponent<RectTransform>();
@@ -135,23 +135,23 @@ public class AutoSetupSimple : MonoBehaviour
         countRect.sizeDelta = Vector2.zero;
         
         TextMeshProUGUI countText = countTextObj.AddComponent<TextMeshProUGUI>();
-        countText.text = "点击次数: 0";
+        countText.text = "鐐瑰嚮娆℃暟: 0";
         countText.fontSize = 24;
         countText.color = Color.white;
         countText.alignment = TextAlignmentOptions.Center;
         
-        Debug.Log("UI设置完成");
+        Debug.Log("UI璁剧疆瀹屾垚");
     }
     
     void Update()
     {
-        // 检测点击
+        // 妫€娴嬬偣鍑?
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
             OnTap();
         }
         
-        // 简单旋转动画
+        // 绠€鍗曟棆杞姩鐢?
         if (tapCatObject != null)
         {
             tapCatObject.transform.Rotate(0, 30f * Time.deltaTime, 0);
@@ -161,9 +161,9 @@ public class AutoSetupSimple : MonoBehaviour
     void OnTap()
     {
         tapCount++;
-        Debug.Log($"点击！次数: {tapCount}");
+        Debug.Log($"鐐瑰嚮锛佹鏁? {tapCount}");
         
-        // 改变猫咪颜色
+        // 鏀瑰彉鐚挭棰滆壊
         if (tapCatObject != null)
         {
             SpriteRenderer spriteRenderer = tapCatObject.GetComponent<SpriteRenderer>();
@@ -177,12 +177,12 @@ public class AutoSetupSimple : MonoBehaviour
                 );
                 spriteRenderer.color = randomColor;
                 
-                // 快速旋转一下
+                // 蹇€熸棆杞竴涓?
                 tapCatObject.transform.Rotate(0, 180f, 0);
             }
         }
         
-        // 更新UI
+        // 鏇存柊UI
         UpdateUI();
     }
     
@@ -194,35 +194,35 @@ public class AutoSetupSimple : MonoBehaviour
             TextMeshProUGUI textComponent = uiText.GetComponent<TextMeshProUGUI>();
             if (textComponent != null)
             {
-                textComponent.text = $"点击次数: {tapCount}";
+                textComponent.text = $"鐐瑰嚮娆℃暟: {tapCount}";
             }
         }
     }
     
     /// <summary>
-    /// 编辑器工具：一键设置
+    /// 缂栬緫鍣ㄥ伐鍏凤細涓€閿缃?
     /// </summary>
-    [ContextMenu("虾宝一键设置")]
+    [ContextMenu("One Click Setup")]
     private void OneClickSetup()
     {
         SetupEverything();
     }
     
     /// <summary>
-    /// 重置点击次数
+    /// 閲嶇疆鐐瑰嚮娆℃暟
     /// </summary>
-    [ContextMenu("重置计数器")]
+    [ContextMenu("Reset Counter")]
     private void ResetCounter()
     {
         tapCount = 0;
         UpdateUI();
-        Debug.Log("计数器重置");
+        Debug.Log("Counter reset.");
     }
     
     /// <summary>
-    /// 测试颜色变化
+    /// 娴嬭瘯棰滆壊鍙樺寲
     /// </summary>
-    [ContextMenu("测试颜色变化")]
+    [ContextMenu("娴嬭瘯棰滆壊鍙樺寲")]
     private void TestColorChange()
     {
         if (tapCatObject != null)

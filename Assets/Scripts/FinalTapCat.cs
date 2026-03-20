@@ -1,53 +1,53 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
-/// 最终版TapCat - 最简单，最可靠，100%能运行
-/// 所有功能在一个文件中，零依赖，自动设置
+/// 鏈€缁堢増TapCat - 鏈€绠€鍗曪紝鏈€鍙潬锛?00%鑳借繍琛?
+/// 鎵€鏈夊姛鑳藉湪涓€涓枃浠朵腑锛岄浂渚濊禆锛岃嚜鍔ㄨ缃?
 /// </summary>
 public class FinalTapCat : MonoBehaviour
 {
-    // 猫咪对象
+    // 鐚挭瀵硅薄
     private GameObject cat;
     
-    // 点击计数
+    // 鐐瑰嚮璁℃暟
     private int clicks = 0;
     
-    // 旋转速度
+    // 鏃嬭浆閫熷害
     private float rotationSpeed = 30f;
     
     void Start()
     {
-        Debug.Log("🎮 TapCat游戏启动！");
+        Debug.Log("TapCat started.");
         
-        // 自动创建猫咪
+        // 鑷姩鍒涘缓鐚挭
         CreateCat();
         
-        // 显示提示
-        Debug.Log("💡 提示：按空格键或鼠标左键点击猫咪");
-        Debug.Log("💡 提示：按R键重置游戏");
+        // 鏄剧ず鎻愮ず
+        Debug.Log("馃挕 鎻愮ず锛氭寜绌烘牸閿垨榧犳爣宸﹂敭鐐瑰嚮鐚挭");
+        Debug.Log("Hint: press R to reset.");
     }
     
     void Update()
     {
-        // 检测空格键
+        // 妫€娴嬬┖鏍奸敭
         if (Input.GetKeyDown(KeyCode.Space))
         {
             HandleClick();
         }
         
-        // 检测鼠标左键
+        // 妫€娴嬮紶鏍囧乏閿?
         if (Input.GetMouseButtonDown(0))
         {
             HandleClick();
         }
         
-        // 检测重置键
+        // 妫€娴嬮噸缃敭
         if (Input.GetKeyDown(KeyCode.R))
         {
             ResetGame();
         }
         
-        // 持续旋转
+        // 鎸佺画鏃嬭浆
         if (cat != null)
         {
             cat.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
@@ -55,128 +55,128 @@ public class FinalTapCat : MonoBehaviour
     }
     
     /// <summary>
-    /// 创建猫咪（使用Cube，100%可靠）
+    /// 鍒涘缓鐚挭锛堜娇鐢–ube锛?00%鍙潬锛?
     /// </summary>
     void CreateCat()
     {
-        // 删除旧的猫咪（如果有）
+        // 鍒犻櫎鏃х殑鐚挭锛堝鏋滄湁锛?
         if (cat != null)
         {
             Destroy(cat);
         }
         
-        // 创建新的猫咪
+        // 鍒涘缓鏂扮殑鐚挭
         cat = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cat.name = "TapCat";
         cat.transform.position = Vector3.zero;
         cat.transform.localScale = new Vector3(3f, 3f, 0.2f);
         
-        // 设置颜色
+        // 璁剧疆棰滆壊
         Renderer renderer = cat.GetComponent<Renderer>();
         if (renderer != null)
         {
-            renderer.material.color = new Color(1f, 0.8f, 0f); // 亮黄色
+            renderer.material.color = new Color(1f, 0.8f, 0f); // 浜粍鑹?
         }
         
-        Debug.Log("🐱 猫咪创建成功！");
+        Debug.Log("TapCat created.");
     }
     
     /// <summary>
-    /// 处理点击
+    /// 澶勭悊鐐瑰嚮
     /// </summary>
     void HandleClick()
     {
         clicks++;
-        Debug.Log($"👆 点击！次数: {clicks}");
+        Debug.Log($"馃憜 鐐瑰嚮锛佹鏁? {clicks}");
         
-        // 改变猫咪颜色
+        // 鏀瑰彉鐚挭棰滆壊
         if (cat != null)
         {
             Renderer renderer = cat.GetComponent<Renderer>();
             if (renderer != null)
             {
-                // 生成随机颜色
+                // 鐢熸垚闅忔満棰滆壊
                 float r = Random.Range(0.5f, 1f);
                 float g = Random.Range(0.5f, 1f);
                 float b = Random.Range(0.5f, 1f);
                 renderer.material.color = new Color(r, g, b);
                 
-                // 点击时的旋转效果
+                // 鐐瑰嚮鏃剁殑鏃嬭浆鏁堟灉
                 cat.transform.Rotate(0, 360, 0);
             }
         }
         
-        // 在屏幕上显示计数（使用GUI，最简单的方法）
+        // 鍦ㄥ睆骞曚笂鏄剧ず璁℃暟锛堜娇鐢℅UI锛屾渶绠€鍗曠殑鏂规硶锛?
         ShowClickCount();
     }
     
     /// <summary>
-    /// 在屏幕上显示点击计数
+    /// 鍦ㄥ睆骞曚笂鏄剧ず鐐瑰嚮璁℃暟
     /// </summary>
     void OnGUI()
     {
-        // 创建简单的GUI显示
+        // 鍒涘缓绠€鍗曠殑GUI鏄剧ず
         GUI.color = Color.white;
         GUI.backgroundColor = new Color(0, 0, 0, 0.7f);
         
-        // 显示点击计数
+        // 鏄剧ず鐐瑰嚮璁℃暟
         GUIStyle style = new GUIStyle(GUI.skin.box);
         style.fontSize = 20;
         style.normal.textColor = Color.white;
         
-        GUI.Box(new Rect(10, 10, 200, 60), $"点击次数: {clicks}\n按R键重置", style);
+        GUI.Box(new Rect(10, 10, 200, 60), $"Clicks: {clicks}\\nPress R to reset", style);
         
-        // 显示操作提示
+        // 鏄剧ず鎿嶄綔鎻愮ず
         GUIStyle hintStyle = new GUIStyle(GUI.skin.label);
         hintStyle.fontSize = 14;
         hintStyle.normal.textColor = Color.yellow;
         
-        GUI.Label(new Rect(10, 80, 300, 40), "💡 提示：按空格键或鼠标左键点击", hintStyle);
+        GUI.Label(new Rect(10, 80, 300, 40), "馃挕 鎻愮ず锛氭寜绌烘牸閿垨榧犳爣宸﹂敭鐐瑰嚮", hintStyle);
     }
     
     /// <summary>
-    /// 显示点击计数（备用方法）
+    /// 鏄剧ず鐐瑰嚮璁℃暟锛堝鐢ㄦ柟娉曪級
     /// </summary>
     void ShowClickCount()
     {
-        // 这个方法被HandleClick调用，但主要显示在OnGUI中
+        // 杩欎釜鏂规硶琚獺andleClick璋冪敤锛屼絾涓昏鏄剧ず鍦∣nGUI涓?
     }
     
     /// <summary>
-    /// 重置游戏
+    /// 閲嶇疆娓告垙
     /// </summary>
     void ResetGame()
     {
         clicks = 0;
-        Debug.Log("🔄 游戏已重置");
+        Debug.Log("Game reset.");
         
-        // 重置猫咪颜色
+        // 閲嶇疆鐚挭棰滆壊
         if (cat != null)
         {
             Renderer renderer = cat.GetComponent<Renderer>();
             if (renderer != null)
             {
-                renderer.material.color = new Color(1f, 0.8f, 0f); // 亮黄色
+                renderer.material.color = new Color(1f, 0.8f, 0f); // 浜粍鑹?
             }
         }
     }
     
     /// <summary>
-    /// 编辑器工具
+    /// 缂栬緫鍣ㄥ伐鍏?
     /// </summary>
-    [ContextMenu("测试点击")]
+    [ContextMenu("娴嬭瘯鐐瑰嚮")]
     void TestClick()
     {
         HandleClick();
     }
     
-    [ContextMenu("重置猫咪")]
+    [ContextMenu("閲嶇疆鐚挭")]
     void ResetCat()
     {
         CreateCat();
     }
     
-    [ContextMenu("随机颜色")]
+    [ContextMenu("闅忔満棰滆壊")]
     void RandomColor()
     {
         if (cat != null)
@@ -188,7 +188,7 @@ public class FinalTapCat : MonoBehaviour
                 float g = Random.Range(0.5f, 1f);
                 float b = Random.Range(0.5f, 1f);
                 renderer.material.color = new Color(r, g, b);
-                Debug.Log("🎨 猫咪颜色已改变");
+                Debug.Log("Cat color changed.");
             }
         }
     }

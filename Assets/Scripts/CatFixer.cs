@@ -1,25 +1,25 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 namespace TapCat
 {
     /// <summary>
-    /// 猫咪显示修复工具
-    /// 确保猫咪一定显示在屏幕上
+    /// 鐚挭鏄剧ず淇宸ュ叿
+    /// 纭繚鐚挭涓€瀹氭樉绀哄湪灞忓箷涓?
     /// </summary>
     public class CatFixer : MonoBehaviour
     {
-        [Header("猫咪设置")]
-        [SerializeField] private Color catColor = new Color(1f, 0.5f, 0f, 1f); // 橙色
+        [Header("鐚挭璁剧疆")]
+        [SerializeField] private Color catColor = new Color(1f, 0.5f, 0f, 1f); // 姗欒壊
         [SerializeField] private Vector3 catPosition = new Vector3(0f, 0f, 0f);
         [SerializeField] private Vector3 catScale = new Vector3(1f, 1f, 1f);
         
-        [Header("UI设置")]
+        [Header("UI璁剧疆")]
         [SerializeField] private bool createUI = true;
         [SerializeField] private Vector2 uiPosition = new Vector2(-20f, -20f);
         
-        [Header("调试")]
+        [Header("璋冭瘯")]
         [SerializeField] private bool debugMode = false;
         
         private GameObject tapCatObject;
@@ -30,28 +30,28 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 修复猫咪显示
+        /// 淇鐚挭鏄剧ず
         /// </summary>
         public void FixCatDisplay()
         {
-            Debug.Log("开始修复猫咪显示...");
+            Debug.Log("寮€濮嬩慨澶嶇尗鍜樉绀?..");
             
-            // 1. 确保TapCat对象存在
+            // 1. 纭繚TapCat瀵硅薄瀛樺湪
             EnsureTapCatObject();
             
-            // 2. 确保SpriteRenderer存在并设置
+            // 2. 纭繚SpriteRenderer瀛樺湪骞惰缃?
             EnsureSpriteRenderer();
             
-            // 3. 确保位置正确
+            // 3. 纭繚浣嶇疆姝ｇ‘
             EnsurePosition();
             
-            // 4. 创建UI（如果需要）
+            // 4. 鍒涘缓UI锛堝鏋滈渶瑕侊級
             if (createUI)
             {
                 EnsureUI();
             }
             
-            Debug.Log("猫咪显示修复完成！");
+            Debug.Log("Cat display fix complete.");
             
             if (debugMode)
             {
@@ -60,7 +60,7 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 确保TapCat对象存在
+        /// 纭繚TapCat瀵硅薄瀛樺湪
         /// </summary>
         private void EnsureTapCatObject()
         {
@@ -68,12 +68,12 @@ namespace TapCat
             
             if (tapCatObject == null)
             {
-                Debug.Log("创建TapCat对象");
+                Debug.Log("鍒涘缓TapCat瀵硅薄");
                 tapCatObject = new GameObject("TapCat");
                 tapCatObject.transform.position = catPosition;
                 tapCatObject.transform.localScale = catScale;
                 
-                // 添加必要组件
+                // 娣诲姞蹇呰缁勪欢
                 tapCatObject.AddComponent<TapCatController>();
                 tapCatObject.AddComponent<AnimationManager>();
                 tapCatObject.AddComponent<InputHandler>();
@@ -81,12 +81,12 @@ namespace TapCat
             }
             else
             {
-                Debug.Log("找到已存在的TapCat对象");
+                Debug.Log("鎵惧埌宸插瓨鍦ㄧ殑TapCat瀵硅薄");
             }
         }
         
         /// <summary>
-        /// 确保SpriteRenderer存在并设置
+        /// 纭繚SpriteRenderer瀛樺湪骞惰缃?
         /// </summary>
         private void EnsureSpriteRenderer()
         {
@@ -94,53 +94,53 @@ namespace TapCat
             
             if (spriteRenderer == null)
             {
-                Debug.Log("添加SpriteRenderer组件");
+                Debug.Log("娣诲姞SpriteRenderer缁勪欢");
                 spriteRenderer = tapCatObject.AddComponent<SpriteRenderer>();
             }
             
-            // 尝试加载猫咪图片
+            // 灏濊瘯鍔犺浇鐚挭鍥剧墖
             bool spriteLoaded = false;
             
-            // 方法1：从Resources加载
+            // 鏂规硶1锛氫粠Resources鍔犺浇
             Sprite catSprite = Resources.Load<Sprite>("Sprites/PlaceholderCat");
             if (catSprite != null)
             {
                 spriteRenderer.sprite = catSprite;
                 spriteLoaded = true;
-                Debug.Log("成功加载猫咪图片");
+                Debug.Log("鎴愬姛鍔犺浇鐚挭鍥剧墖");
             }
             else
             {
-                Debug.LogWarning("猫咪图片未找到，使用彩色方块");
+                Debug.LogWarning("鐚挭鍥剧墖鏈壘鍒帮紝浣跨敤褰╄壊鏂瑰潡");
             }
             
-            // 如果图片未加载，设置颜色
+            // 濡傛灉鍥剧墖鏈姞杞斤紝璁剧疆棰滆壊
             if (!spriteLoaded)
             {
                 spriteRenderer.color = catColor;
             }
             
-            // 确保排序正确
+            // 纭繚鎺掑簭姝ｇ‘
             spriteRenderer.sortingOrder = 0;
         }
         
         /// <summary>
-        /// 确保位置正确
+        /// 纭繚浣嶇疆姝ｇ‘
         /// </summary>
         private void EnsurePosition()
         {
             tapCatObject.transform.position = catPosition;
             tapCatObject.transform.localScale = catScale;
             
-            Debug.Log($"设置猫咪位置: {catPosition}, 缩放: {catScale}");
+            Debug.Log($"璁剧疆鐚挭浣嶇疆: {catPosition}, 缂╂斁: {catScale}");
         }
         
         /// <summary>
-        /// 确保UI存在
+        /// 纭繚UI瀛樺湪
         /// </summary>
         private void EnsureUI()
         {
-            // 查找或创建Canvas
+            // 鏌ユ壘鎴栧垱寤篊anvas
             Canvas canvas = FindObjectOfType<Canvas>();
             if (canvas == null)
             {
@@ -149,10 +149,10 @@ namespace TapCat
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 canvasObj.AddComponent<CanvasScaler>();
                 canvasObj.AddComponent<GraphicRaycaster>();
-                Debug.Log("创建Canvas");
+                Debug.Log("鍒涘缓Canvas");
             }
             
-            // 检查CounterUI是否存在
+            // 妫€鏌ounterUI鏄惁瀛樺湪
             GameObject counterUI = GameObject.Find("CounterUI");
             if (counterUI == null)
             {
@@ -161,15 +161,15 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 创建简单UI
+        /// 鍒涘缓绠€鍗昒I
         /// </summary>
         private void CreateSimpleUI(Canvas canvas)
         {
-            // 创建UI容器
+            // 鍒涘缓UI瀹瑰櫒
             GameObject uiContainer = new GameObject("CounterUI");
             uiContainer.transform.SetParent(canvas.transform);
             
-            // 添加RectTransform
+            // 娣诲姞RectTransform
             RectTransform rectTransform = uiContainer.AddComponent<RectTransform>();
             rectTransform.anchorMin = new Vector2(1, 1);
             rectTransform.anchorMax = new Vector2(1, 1);
@@ -177,7 +177,7 @@ namespace TapCat
             rectTransform.anchoredPosition = uiPosition;
             rectTransform.sizeDelta = new Vector2(200, 80);
             
-            // 添加背景
+            // 娣诲姞鑳屾櫙
             GameObject background = new GameObject("Background");
             background.transform.SetParent(uiContainer.transform);
             RectTransform bgRect = background.AddComponent<RectTransform>();
@@ -188,7 +188,7 @@ namespace TapCat
             Image bgImage = background.AddComponent<Image>();
             bgImage.color = new Color(0.1f, 0.1f, 0.1f, 0.8f);
             
-            // 添加点击次数文本
+            // 娣诲姞鐐瑰嚮娆℃暟鏂囨湰
             GameObject countTextObj = new GameObject("TapCountText");
             countTextObj.transform.SetParent(uiContainer.transform);
             RectTransform countRect = countTextObj.AddComponent<RectTransform>();
@@ -198,43 +198,43 @@ namespace TapCat
             countRect.sizeDelta = Vector2.zero;
             
             TextMeshProUGUI countText = countTextObj.AddComponent<TextMeshProUGUI>();
-            countText.text = "点击次数: 0";
+            countText.text = "鐐瑰嚮娆℃暟: 0";
             countText.fontSize = 24;
             countText.color = Color.white;
             countText.alignment = TextAlignmentOptions.Center;
             
-            Debug.Log("创建简单UI");
+            Debug.Log("鍒涘缓绠€鍗昒I");
         }
         
         /// <summary>
-        /// 记录调试信息
+        /// 璁板綍璋冭瘯淇℃伅
         /// </summary>
         private void LogDebugInfo()
         {
-            Debug.Log("=== 猫咪显示调试信息 ===");
-            Debug.Log($"对象名称: {tapCatObject.name}");
-            Debug.Log($"位置: {tapCatObject.transform.position}");
-            Debug.Log($"缩放: {tapCatObject.transform.localScale}");
+            Debug.Log("=== 鐚挭鏄剧ず璋冭瘯淇℃伅 ===");
+            Debug.Log($"瀵硅薄鍚嶇О: {tapCatObject.name}");
+            Debug.Log($"浣嶇疆: {tapCatObject.transform.position}");
+            Debug.Log($"缂╂斁: {tapCatObject.transform.localScale}");
             
             SpriteRenderer spriteRenderer = tapCatObject.GetComponent<SpriteRenderer>();
             if (spriteRenderer != null)
             {
-                Debug.Log($"SpriteRenderer存在: 是");
-                Debug.Log($"Sprite: {spriteRenderer.sprite?.name ?? "无"}");
-                Debug.Log($"颜色: {spriteRenderer.color}");
+                Debug.Log("SpriteRenderer present: yes");
+                Debug.Log($"Sprite: {(spriteRenderer.sprite != null ? spriteRenderer.sprite.name : "None")}");
+                Debug.Log($"棰滆壊: {spriteRenderer.color}");
             }
             else
             {
-                Debug.LogError("SpriteRenderer不存在！");
+                Debug.LogError("SpriteRenderer涓嶅瓨鍦紒");
             }
             
             Debug.Log("======================");
         }
         
         /// <summary>
-        /// 编辑器工具：快速修复
+        /// 缂栬緫鍣ㄥ伐鍏凤細蹇€熶慨澶?
         /// </summary>
-        [ContextMenu("快速修复猫咪显示")]
+        [ContextMenu("Quick Fix Cat Display")]
         private void QuickFix()
         {
             FixCatDisplay();

@@ -1,31 +1,31 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TapCat
 {
     /// <summary>
-    /// 输入处理器
-    /// 负责处理键盘和鼠标输入
+    /// 杈撳叆澶勭悊鍣?
+    /// 璐熻矗澶勭悊閿洏鍜岄紶鏍囪緭鍏?
     /// </summary>
     public class InputHandler : MonoBehaviour
     {
-        [Header("组件引用")]
+        [Header("缁勪欢寮曠敤")]
         [SerializeField] private TapCatController tapCatController;
         [SerializeField] private AnimationManager animationManager;
         
-        [Header("输入设置")]
+        [Header("杈撳叆璁剧疆")]
         [SerializeField] private KeyCode tapKey = KeyCode.Space;
         [SerializeField] private KeyCode resetKey = KeyCode.R;
         [SerializeField] private KeyCode danceToggleKey = KeyCode.D;
         
-        [Header("鼠标设置")]
-        [SerializeField] private LayerMask catLayerMask = -1; // 默认所有层
+        [Header("榧犳爣璁剧疆")]
+        [SerializeField] private LayerMask catLayerMask = -1; // 榛樿鎵€鏈夊眰
         [SerializeField] private float maxRayDistance = 100f;
         
         private Camera mainCamera;
         
         private void Start()
         {
-            // 获取组件引用
+            // 鑾峰彇缁勪欢寮曠敤
             if (tapCatController == null)
             {
                 tapCatController = GetComponent<TapCatController>();
@@ -36,14 +36,14 @@ namespace TapCat
                 animationManager = GetComponent<AnimationManager>();
             }
             
-            // 获取主相机
+            // 鑾峰彇涓荤浉鏈?
             mainCamera = Camera.main;
             if (mainCamera == null)
             {
-                Debug.LogWarning("InputHandler: 未找到主相机");
+                Debug.LogWarning("InputHandler: 鏈壘鍒颁富鐩告満");
             }
             
-            Debug.Log("InputHandler: 输入系统初始化完成");
+            Debug.Log("InputHandler: initialized.");
         }
         
         private void Update()
@@ -53,36 +53,36 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 处理键盘输入
+        /// 澶勭悊閿洏杈撳叆
         /// </summary>
         private void HandleKeyboardInput()
         {
-            // 空格键点击
+            // 绌烘牸閿偣鍑?
             if (Input.GetKeyDown(tapKey))
             {
                 HandleTap();
             }
             
-            // R键重置
+            // R閿噸缃?
             if (Input.GetKeyDown(resetKey))
             {
                 if (tapCatController != null)
                 {
                     tapCatController.ResetTapCount();
-                    Debug.Log("按R键重置点击计数");
+                    Debug.Log("Press R: tap count reset.");
                 }
             }
             
-            // D键切换舞蹈状态
+            // D閿垏鎹㈣垶韫堢姸鎬?
             if (Input.GetKeyDown(danceToggleKey))
             {
                 ToggleTapDance();
             }
             
-            // 任意键点击（除了功能键）
+            // 浠绘剰閿偣鍑伙紙闄や簡鍔熻兘閿級
             if (Input.anyKeyDown && !IsFunctionKey())
             {
-                // 避免重复触发
+                // 閬垮厤閲嶅瑙﹀彂
                 if (!Input.GetKeyDown(tapKey) && !Input.GetKeyDown(resetKey) && !Input.GetKeyDown(danceToggleKey))
                 {
                     HandleTap();
@@ -91,31 +91,31 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 处理鼠标输入
+        /// 澶勭悊榧犳爣杈撳叆
         /// </summary>
         private void HandleMouseInput()
         {
-            if (Input.GetMouseButtonDown(0)) // 左键点击
+            if (Input.GetMouseButtonDown(0)) // 宸﹂敭鐐瑰嚮
             {
-                // 检查是否点击到猫咪
+                // 妫€鏌ユ槸鍚︾偣鍑诲埌鐚挭
                 Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 
                 if (Physics.Raycast(ray, out hit, maxRayDistance, catLayerMask))
                 {
-                    // 检查是否点击到TapCat对象
+                    // 妫€鏌ユ槸鍚︾偣鍑诲埌TapCat瀵硅薄
                     if (hit.collider.gameObject == gameObject || 
                         hit.collider.transform.IsChildOf(transform))
                     {
                         HandleTap();
-                        Debug.Log("鼠标点击到猫咪！");
+                        Debug.Log("榧犳爣鐐瑰嚮鍒扮尗鍜紒");
                     }
                 }
             }
         }
         
         /// <summary>
-        /// 处理点击事件
+        /// 澶勭悊鐐瑰嚮浜嬩欢
         /// </summary>
         private void HandleTap()
         {
@@ -131,7 +131,7 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 切换踢踏舞状态
+        /// 鍒囨崲韪㈣笍鑸炵姸鎬?
         /// </summary>
         private void ToggleTapDance()
         {
@@ -143,15 +143,15 @@ namespace TapCat
                 }
                 else
                 {
-                    tapCatController.OnCatTapped(); // 开始舞蹈
+                    tapCatController.OnCatTapped(); // 寮€濮嬭垶韫?
                 }
             }
             
-            Debug.Log("按D键切换舞蹈状态");
+            Debug.Log("Toggle dance mode.");
         }
         
         /// <summary>
-        /// 检查是否是功能键
+        /// 妫€鏌ユ槸鍚︽槸鍔熻兘閿?
         /// </summary>
         private bool IsFunctionKey()
         {
@@ -163,16 +163,16 @@ namespace TapCat
         }
         
         /// <summary>
-        /// 设置点击键
+        /// 璁剧疆鐐瑰嚮閿?
         /// </summary>
         public void SetTapKey(KeyCode newKey)
         {
             tapKey = newKey;
-            Debug.Log($"点击键已设置为: {newKey}");
+            Debug.Log($"鐐瑰嚮閿凡璁剧疆涓? {newKey}");
         }
         
         /// <summary>
-        /// 获取当前点击键
+        /// 鑾峰彇褰撳墠鐐瑰嚮閿?
         /// </summary>
         public KeyCode GetTapKey()
         {
