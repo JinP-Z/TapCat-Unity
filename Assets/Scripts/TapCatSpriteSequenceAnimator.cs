@@ -122,11 +122,36 @@ namespace TapCat
         private void LoadFramesFromResources()
         {
             frames = new Sprite[Mathf.Max(1, frameCount)];
+            string normalizedBasePath = NormalizeResourceBasePath(resourceBasePath);
+            int loaded = LoadFramesByDirectPath(normalizedBasePath);
+
+            if (loaded == 0)
+            {
+                loaded = LoadFramesByFolderLookup(normalizedBasePath);
+            }
+
+            if (loaded == 0)
+            {
+                loaded = LoadFramesFromTextures(normalizedBasePath);
+            }
+
+            if (loaded == 0)
+            {
+                Debug.LogError($"TapCatSpriteSequenceAnimator: Failed to load frames. Expected Resources/{normalizedBasePath}00 ~ {normalizedBasePath}{frameCount - 1:00}.");
+            }
+            else if (loaded < frameCount)
+            {
+                Debug.LogWarning($"TapCatSpriteSequenceAnimator: Loaded {loaded}/{frameCount} frames from Resources/{normalizedBasePath}**. Missing frames will end playback.");
+            }
+        }
+
+        private int LoadFramesByDirectPath(string normalizedBasePath)
+        {
             int loaded = 0;
 
             for (int i = 0; i < frameCount; i++)
             {
-                string path = $"{resourceBasePath}{i:00}";
+                string path = $"{normalizedBasePath}{i:00}";
                 Sprite frame = Resources.Load<Sprite>(path);
                 if (frame != null)
                 {
@@ -135,13 +160,98 @@ namespace TapCat
                 }
             }
 
-            if (loaded == 0)
+            return loaded;
+        }
+
+        private int LoadFramesByFolderLookup(string normalizedBasePath)
+        {
+            GetFolderAndPrefix(normalizedBasePath, out string folderPath, out string namePrefix);
+            Sprite[] sprites = Resources.LoadAll<Sprite>(folderPath);
+            if (sprites == null || sprites.Length == 0)
             {
-                Debug.LogError("TapCatSpriteSequenceAnimator: Failed to load frames. Expected Resources/CatAnimation/cat_anim_00.png ~ cat_anim_09.png.");
+                return 0;
             }
-            else if (loaded < frameCount)
+
+            int loaded = 0;
+            for (int i = 0; i < frameCount; i++)
             {
-                Debug.LogWarning($"TapCatSpriteSequenceAnimator: Loaded {loaded}/{frameCount} frames. Missing frames will end playback.");
+                string spriteName = $"{namePrefix}{i:00}";
+                for (int s = 0; s < sprites.Length; s++)
+                {
+                    Sprite sprite = sprites[s];
+                    if (sprite != null && sprite.name == spriteName)
+                    {
+                        frames[i] = sprite;
+                        loaded++;
+                        break;
+                    }
+                }
+            }
+
+            return loaded;
+        }
+
+        private int LoadFramesFromTextures(string normalizedBasePath)
+        {
+            GetFolderAndPrefix(normalizedBasePath, out string folderPath, out string namePrefix);
+            Texture2D[] textures = Resources.LoadAll<Texture2D>(folderPath);
+            if (textures == null || textures.Length == 0)
+            {
+                return 0;
+            }
+
+            int loaded = 0;
+            for (int i = 0; i < frameCount; i++)
+            {
+                string textureName = $"{namePrefix}{i:00}";
+                for (int t = 0; t < textures.Length; t++)
+                {
+                    Texture2D texture = textures[t];
+                    if (texture != null && texture.name == textureName)
+                    {
+                        frames[i] = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f);
+                        loaded++;
+                        break;
+                    }
+                }
+            }
+
+            return loaded;
+        }
+
+        private static string NormalizeResourceBasePath(string basePath)
+        {
+            if (string.IsNullOrWhiteSpace(basePath))
+            {
+                return "CatAnimation/cat_anim_";
+            }
+
+            string normalized = basePath.Replace("\\", "/").Trim();
+            if (normalized.StartsWith("Assets/Resources/"))
+            {
+                normalized = normalized.Substring("Assets/Resources/".Length);
+            }
+            else if (normalized.StartsWith("Resources/"))
+            {
+                normalized = normalized.Substring("Resources/".Length);
+            }
+
+            return normalized.TrimStart('/');
+        }
+
+        private static void GetFolderAndPrefix(string normalizedBasePath, out string folderPath, out string namePrefix)
+        {
+            string cleaned = normalizedBasePath.Trim('/');
+            int slashIndex = cleaned.LastIndexOf('/');
+            if (slashIndex >= 0)
+            {
+                folderPath = cleaned.Substring(0, slashIndex);
+                namePrefix = cleaned.Substring(slashIndex + 1);
+            }
+            else
+            {
+                folderPath = string.Empty;
+                namePrefix = cleaned;
             }
         }
 
