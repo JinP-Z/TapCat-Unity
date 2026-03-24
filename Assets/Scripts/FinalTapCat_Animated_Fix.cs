@@ -20,7 +20,7 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
     {
         Debug.Log("TapCat animated controller started.");
 
-        CreateCat();
+        InitializeCat();
         LoadAnimationResources();
 
         Debug.Log("Controls: Space/Left Mouse = Play animation, R = Reset");
@@ -45,29 +45,16 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
 
         if (cat != null && !isPlayingAnimation)
         {
-            cat.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
+            cat.transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
         }
 
         UpdateAnimation();
     }
 
-    private void CreateCat()
+    private void InitializeCat()
     {
-        if (cat != null)
-        {
-            Destroy(cat);
-        }
-
-        cat = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cat.name = "TapCat";
-        cat.transform.position = Vector3.zero;
-        cat.transform.localScale = new Vector3(3f, 3f, 0.2f);
-
-        Renderer renderer = cat.GetComponent<Renderer>();
-        if (renderer != null)
-        {
-            renderer.material.color = new Color(1f, 0.8f, 0f);
-        }
+        cat = gameObject;
+        cat.name = string.IsNullOrWhiteSpace(cat.name) ? "TapCat" : cat.name;
 
         catSprite = cat.GetComponent<SpriteRenderer>();
         if (catSprite == null)
@@ -75,7 +62,9 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
             catSprite = cat.AddComponent<SpriteRenderer>();
         }
 
-        Debug.Log("Cat object created.");
+        EnsureClickCollider();
+
+        Debug.Log("Cat object initialized (SpriteRenderer).");
     }
 
     private void LoadAnimationResources()
@@ -127,6 +116,8 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
             catSprite.sprite = placeholder;
             Debug.Log("Set placeholder sprite.");
         }
+
+        UpdateClickColliderSize();
     }
 
     private void HandleClick()
@@ -210,15 +201,14 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
             return;
         }
 
-        Renderer renderer = cat.GetComponent<Renderer>();
-        if (renderer != null)
+        if (catSprite != null)
         {
             float r = Random.Range(0.5f, 1f);
             float g = Random.Range(0.5f, 1f);
             float b = Random.Range(0.5f, 1f);
-            renderer.material.color = new Color(r, g, b);
+            catSprite.color = new Color(r, g, b);
 
-            cat.transform.Rotate(0, 360, 0);
+            cat.transform.Rotate(0, 0, 360);
         }
     }
 
@@ -269,13 +259,9 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
         clicks = 0;
         Debug.Log("Game reset.");
 
-        if (cat != null)
+        if (catSprite != null)
         {
-            Renderer renderer = cat.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                renderer.material.color = new Color(1f, 0.8f, 0f);
-            }
+            catSprite.color = Color.white;
         }
 
         isPlayingAnimation = false;
@@ -292,6 +278,12 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
     {
         animationFrames = frames;
         Debug.Log($"Animation frames set: {frames.Length}");
+
+        if (catSprite != null && frames != null && frames.Length > 0 && frames[0] != null)
+        {
+            catSprite.sprite = frames[0];
+            UpdateClickColliderSize();
+        }
     }
 
     public void SetFrameRate(float framesPerSecond)
@@ -305,6 +297,11 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
 
     [ContextMenu("Test Click")]
     public void TestClick()
+    {
+        HandleClick();
+    }
+
+    public void PlayTapAnimation()
     {
         HandleClick();
     }
@@ -339,5 +336,29 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
     public void ReloadAnimationFrames()
     {
         LoadAnimationResources();
+    }
+
+    private void EnsureClickCollider()
+    {
+        if (GetComponent<Collider>() != null || GetComponent<Collider2D>() != null)
+        {
+            return;
+        }
+
+        BoxCollider2D collider2D = gameObject.AddComponent<BoxCollider2D>();
+        collider2D.offset = Vector2.zero;
+        UpdateClickColliderSize();
+    }
+
+    private void UpdateClickColliderSize()
+    {
+        BoxCollider2D collider2D = GetComponent<BoxCollider2D>();
+        if (collider2D == null || catSprite == null || catSprite.sprite == null)
+        {
+            return;
+        }
+
+        Vector2 size = catSprite.sprite.bounds.size;
+        collider2D.size = size;
     }
 }

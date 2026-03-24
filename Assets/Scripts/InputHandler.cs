@@ -11,6 +11,8 @@ namespace TapCat
         [Header("缁勪欢寮曠敤")]
         [SerializeField] private TapCatController tapCatController;
         [SerializeField] private AnimationManager animationManager;
+        [SerializeField] private TapCat2D tapCat2D;
+        [SerializeField] private FinalTapCat_Animated_Fix spriteSequenceController;
         
         [Header("杈撳叆璁剧疆")]
         [SerializeField] private KeyCode tapKey = KeyCode.Space;
@@ -34,6 +36,16 @@ namespace TapCat
             if (animationManager == null)
             {
                 animationManager = GetComponent<AnimationManager>();
+            }
+
+            if (tapCat2D == null)
+            {
+                tapCat2D = GetComponent<TapCat2D>();
+            }
+
+            if (spriteSequenceController == null)
+            {
+                spriteSequenceController = GetComponent<FinalTapCat_Animated_Fix>();
             }
             
             // 鑾峰彇涓荤浉鏈?
@@ -111,6 +123,8 @@ namespace TapCat
                 Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 
+                bool handled = false;
+
                 if (Physics.Raycast(ray, out hit, maxRayDistance, catLayerMask))
                 {
                     // 妫€鏌ユ槸鍚︾偣鍑诲埌TapCat瀵硅薄
@@ -119,6 +133,21 @@ namespace TapCat
                     {
                         HandleTap();
                         Debug.Log("榧犳爣鐐瑰嚮鍒扮尗鍜紒");
+                        handled = true;
+                    }
+                }
+
+                if (!handled)
+                {
+                    RaycastHit2D hit2D = Physics2D.Raycast(ray.origin, ray.direction, maxRayDistance, catLayerMask);
+                    if (hit2D.collider != null)
+                    {
+                        if (hit2D.collider.gameObject == gameObject ||
+                            hit2D.collider.transform.IsChildOf(transform))
+                        {
+                            HandleTap();
+                            Debug.Log("榧犳爣鐐瑰嚮鍒扮尗鍜紒");
+                        }
                     }
                 }
             }
@@ -129,12 +158,25 @@ namespace TapCat
         /// </summary>
         private void HandleTap()
         {
+            bool playedSprite = false;
+
+            if (tapCat2D != null)
+            {
+                tapCat2D.StartCatAnimation();
+                playedSprite = true;
+            }
+            else if (spriteSequenceController != null)
+            {
+                spriteSequenceController.PlayTapAnimation();
+                playedSprite = true;
+            }
+
             if (tapCatController != null)
             {
                 tapCatController.OnCatTapped();
             }
             
-            if (animationManager != null)
+            if (!playedSprite && animationManager != null)
             {
                 animationManager.PlayTapAnimation();
             }
