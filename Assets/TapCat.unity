@@ -465,10 +465,9 @@ GameObject:
   - component: {fileID: 376437465}
   - component: {fileID: 376437464}
   - component: {fileID: 376437466}
-  - component: {fileID: 376437463}
   - component: {fileID: 376437462}
-  - component: {fileID: 376437461}
   - component: {fileID: 376437460}
+  - component: {fileID: 376437467}
   m_Layer: 0
   m_Name: TapCat
   m_TagString: Untagged
@@ -489,7 +488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tapCatController: {fileID: 376437462}
-  animationManager: {fileID: 376437461}
+  spriteAnimator: {fileID: 376437467}
   tapKey: 32
   resetKey: 114
   danceToggleKey: 100
@@ -497,25 +496,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   maxRayDistance: 100
---- !u!114 &376437461
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 376437459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e02732e57f0269b43ba06bb5d105472f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  catAnimator: {fileID: 376437463}
-  idleStateName: Idle
-  tapDanceStateName: TapDance
-  tapTriggerName: Tap
-  isTapDancingParam: IsTapDancing
-  idleToDanceTransitionTime: 0.2
-  danceToIdleTransitionTime: 0.5
 --- !u!114 &376437462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -528,29 +508,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 819c1836622111440a4ef166ba5544d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  catAnimator: {fileID: 376437463}
+  catAnimator: {fileID: 0}
   tapCount: 0
   tapCooldown: 0.2
---- !u!95 &376437463
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 376437459}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8aff4a7075dcee548a7d128dbaeca4d2, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!212 &376437464
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -603,6 +563,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &376437467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376437459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9ae9360ef2a42a3a73f27737ffb7fa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceBasePath: CatAnimation/cat_anim_
+  frameCount: 10
+  secondsPerFrame: 0.1
+  loop: 0
+  handleOwnInput: 0
+  spriteRenderer: {fileID: 376437464}
 --- !u!65 &376437466
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -10,9 +10,7 @@ namespace TapCat
     {
         [Header("缁勪欢寮曠敤")]
         [SerializeField] private TapCatController tapCatController;
-        [SerializeField] private AnimationManager animationManager;
-        [SerializeField] private TapCat2D tapCat2D;
-        [SerializeField] private FinalTapCat_Animated_Fix spriteSequenceController;
+        [SerializeField] private TapCatSpriteSequenceAnimator spriteAnimator;
         
         [Header("杈撳叆璁剧疆")]
         [SerializeField] private KeyCode tapKey = KeyCode.Space;
@@ -33,40 +31,20 @@ namespace TapCat
                 tapCatController = GetComponent<TapCatController>();
             }
             
-            if (animationManager == null)
+            if (spriteAnimator == null)
             {
-                animationManager = GetComponent<AnimationManager>();
+                spriteAnimator = GetComponent<TapCatSpriteSequenceAnimator>();
             }
 
-            if (tapCat2D == null)
+            if (spriteAnimator == null)
             {
-                tapCat2D = GetComponent<TapCat2D>();
+                spriteAnimator = gameObject.AddComponent<TapCatSpriteSequenceAnimator>();
+                Debug.Log("InputHandler: Added TapCatSpriteSequenceAnimator to TapCat.");
             }
 
-            if (spriteSequenceController == null)
+            if (spriteAnimator != null)
             {
-                spriteSequenceController = GetComponent<FinalTapCat_Animated_Fix>();
-            }
-
-            if (spriteSequenceController == null)
-            {
-                spriteSequenceController = FindObjectOfType<FinalTapCat_Animated_Fix>();
-            }
-
-            if (spriteSequenceController == null && tapCat2D == null)
-            {
-                spriteSequenceController = gameObject.AddComponent<FinalTapCat_Animated_Fix>();
-                Debug.Log("InputHandler: Added FinalTapCat_Animated_Fix to TapCat.");
-            }
-
-            if (spriteSequenceController != null)
-            {
-                spriteSequenceController.SetExternalInputMode(true);
-                Animator animator = GetComponent<Animator>();
-                if (animator != null)
-                {
-                    animator.enabled = false;
-                }
+                spriteAnimator.SetExternalInputMode(true);
             }
             
             // 鑾峰彇涓荤浉鏈?
@@ -105,14 +83,9 @@ namespace TapCat
                     Debug.Log("Press R: tap count reset.");
                 }
 
-                if (tapCat2D != null)
+                if (spriteAnimator != null)
                 {
-                    tapCat2D.ResetGame();
-                }
-
-                if (spriteSequenceController != null)
-                {
-                    spriteSequenceController.ResetGame();
+                    spriteAnimator.ResetAnimation();
                 }
             }
             
@@ -191,14 +164,9 @@ namespace TapCat
         {
             bool playedSprite = false;
 
-            if (tapCat2D != null)
+            if (spriteAnimator != null)
             {
-                tapCat2D.StartCatAnimation();
-                playedSprite = true;
-            }
-            else if (spriteSequenceController != null)
-            {
-                spriteSequenceController.PlayTapAnimation();
+                spriteAnimator.PlayTapAnimation();
                 playedSprite = true;
             }
 
@@ -206,10 +174,10 @@ namespace TapCat
             {
                 tapCatController.OnCatTapped();
             }
-            
-            if (!playedSprite && animationManager != null)
+
+            if (!playedSprite)
             {
-                animationManager.PlayTapAnimation();
+                Debug.LogWarning("InputHandler: No sprite animation system available.");
             }
         }
         
