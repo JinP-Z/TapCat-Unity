@@ -268,7 +268,7 @@ public class FinalTapCat_Animated : MonoBehaviour
     }
 
     [ContextMenu("Test Click")]
-    private void TestClick()
+    public void TestClick()
     {
         HandleClick();
     }
@@ -280,7 +280,7 @@ public class FinalTapCat_Animated : MonoBehaviour
     }
 
     [ContextMenu("Check Animation System")]
-    private void CheckAnimationSystem()
+    public void CheckAnimationSystem()
     {
         if (animationFrames == null || animationFrames.Length == 0)
         {

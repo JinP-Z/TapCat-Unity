@@ -97,6 +97,16 @@ namespace TapCat
         {
             if (Input.GetMouseButtonDown(0)) // 宸﹂敭鐐瑰嚮
             {
+                if (mainCamera == null)
+                {
+                    mainCamera = Camera.main;
+                    if (mainCamera == null)
+                    {
+                        Debug.LogWarning("InputHandler: Cannot handle mouse input without a main camera.");
+                        return;
+                    }
+                }
+
                 // 妫€鏌ユ槸鍚︾偣鍑诲埌鐚挭
                 Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
