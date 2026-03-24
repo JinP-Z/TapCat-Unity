@@ -17,6 +17,14 @@ namespace TapCat
         
         private float lastTapTime = 0f;
         private bool isTapDancing = false;
+
+        private void Start()
+        {
+            if (catAnimator == null)
+            {
+                catAnimator = GetComponent<Animator>();
+            }
+        }
         
         /// <summary>
         /// 褰撶尗鍜鐐瑰嚮鏃惰皟鐢?
@@ -37,7 +45,7 @@ namespace TapCat
             }
             
             // 瑙﹀彂鐐瑰嚮鍔ㄧ敾
-            if (catAnimator != null)
+            if (catAnimator != null && catAnimator.enabled)
             {
                 catAnimator.SetTrigger("Tap");
             }
@@ -55,7 +63,7 @@ namespace TapCat
         {
             isTapDancing = true;
             
-            if (catAnimator != null)
+            if (catAnimator != null && catAnimator.enabled)
             {
                 catAnimator.SetBool("IsTapDancing", true);
             }
@@ -71,7 +79,7 @@ namespace TapCat
         {
             isTapDancing = false;
             
-            if (catAnimator != null)
+            if (catAnimator != null && catAnimator.enabled)
             {
                 catAnimator.SetBool("IsTapDancing", false);
             }

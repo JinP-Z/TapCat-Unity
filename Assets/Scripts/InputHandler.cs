@@ -47,6 +47,27 @@ namespace TapCat
             {
                 spriteSequenceController = GetComponent<FinalTapCat_Animated_Fix>();
             }
+
+            if (spriteSequenceController == null)
+            {
+                spriteSequenceController = FindObjectOfType<FinalTapCat_Animated_Fix>();
+            }
+
+            if (spriteSequenceController == null && tapCat2D == null)
+            {
+                spriteSequenceController = gameObject.AddComponent<FinalTapCat_Animated_Fix>();
+                Debug.Log("InputHandler: Added FinalTapCat_Animated_Fix to TapCat.");
+            }
+
+            if (spriteSequenceController != null)
+            {
+                spriteSequenceController.SetExternalInputMode(true);
+                Animator animator = GetComponent<Animator>();
+                if (animator != null)
+                {
+                    animator.enabled = false;
+                }
+            }
             
             // 鑾峰彇涓荤浉鏈?
             mainCamera = Camera.main;
@@ -82,6 +103,16 @@ namespace TapCat
                 {
                     tapCatController.ResetTapCount();
                     Debug.Log("Press R: tap count reset.");
+                }
+
+                if (tapCat2D != null)
+                {
+                    tapCat2D.ResetGame();
+                }
+
+                if (spriteSequenceController != null)
+                {
+                    spriteSequenceController.ResetGame();
                 }
             }
             

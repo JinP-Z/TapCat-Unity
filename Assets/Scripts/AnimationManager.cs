@@ -44,7 +44,7 @@ namespace TapCat
         /// </summary>
         public void PlayTapAnimation()
         {
-            if (catAnimator != null)
+            if (catAnimator != null && catAnimator.enabled)
             {
                 catAnimator.SetTrigger(tapTriggerName);
                 Debug.Log("鎾斁鐐瑰嚮鍔ㄧ敾");
@@ -56,7 +56,7 @@ namespace TapCat
         /// </summary>
         public void StartTapDance()
         {
-            if (catAnimator != null)
+            if (catAnimator != null && catAnimator.enabled)
             {
                 catAnimator.SetBool(isTapDancingParam, true);
                 Debug.Log("寮€濮嬭涪韪忚垶鍔ㄧ敾");
@@ -68,7 +68,7 @@ namespace TapCat
         /// </summary>
         public void StopTapDance()
         {
-            if (catAnimator != null)
+            if (catAnimator != null && catAnimator.enabled)
             {
                 catAnimator.SetBool(isTapDancingParam, false);
                 Debug.Log("Stop tap dance animation.");
@@ -80,7 +80,7 @@ namespace TapCat
         /// </summary>
         public bool IsTapDancing()
         {
-            if (catAnimator != null)
+            if (catAnimator != null && catAnimator.enabled)
             {
                 return catAnimator.GetBool(isTapDancingParam);
             }
@@ -92,7 +92,7 @@ namespace TapCat
         /// </summary>
         public string GetCurrentState()
         {
-            if (catAnimator != null)
+            if (catAnimator != null && catAnimator.enabled)
             {
                 var stateInfo = catAnimator.GetCurrentAnimatorStateInfo(0);
                 

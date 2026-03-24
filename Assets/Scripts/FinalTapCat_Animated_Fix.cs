@@ -15,6 +15,7 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
     private float animationTimer = 0f;
     private float frameTime = 0.1f;
     private int currentFrame = 0;
+    [SerializeField] private bool handleOwnInput = true;
 
     private void Start()
     {
@@ -23,24 +24,33 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
         InitializeCat();
         LoadAnimationResources();
 
+        if (GetComponent<TapCat.InputHandler>() != null)
+        {
+            handleOwnInput = false;
+            Debug.Log("FinalTapCat_Animated_Fix: InputHandler detected, using external input.");
+        }
+
         Debug.Log("Controls: Space/Left Mouse = Play animation, R = Reset");
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (handleOwnInput)
         {
-            HandleClick();
-        }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                HandleClick();
+            }
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            HandleClick();
-        }
+            if (Input.GetMouseButtonDown(0))
+            {
+                HandleClick();
+            }
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ResetGame();
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                ResetGame();
+            }
         }
 
         if (cat != null && !isPlayingAnimation)
@@ -254,7 +264,7 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
         // Displayed in OnGUI.
     }
 
-    private void ResetGame()
+    public void ResetGame()
     {
         clicks = 0;
         Debug.Log("Game reset.");
@@ -310,6 +320,11 @@ public class FinalTapCat_Animated_Fix : MonoBehaviour
     private void TestResetGame()
     {
         ResetGame();
+    }
+
+    public void SetExternalInputMode(bool useExternalInput)
+    {
+        handleOwnInput = !useExternalInput;
     }
 
     [ContextMenu("Check Animation System")]
