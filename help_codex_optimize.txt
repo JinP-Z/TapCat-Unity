@@ -1,0 +1,78 @@
+# Codex 优化指导
+
+## 已发现的问题
+
+### 1. InputManager.cs 性能问题
+- `CheckAnyInput()` 方法效率低下
+- 每帧循环检查所有键盘按键（0-519）和鼠标按键（0-5）
+- 总共检查 525 个按键，非常低效
+
+### 2. 编码问题
+- 中文注释显示乱码（GBK/UTF-8 编码问题）
+- 需要转换为 UTF-8 with BOM
+
+### 3. UIManager.cs Bug
+- 冷却时间显示有问题
+- 具体问题代码行已定位
+
+## 优化建议
+
+### InputManager.cs 优化方案
+
+```csharp
+// 优化前：低效的循环检查
+private bool CheckAnyInput()
+{
+    // 检查所有键盘按键（技术宪法第二十二条：所有键盘按键都触发）
+    for (int i = 0; i < (int)KeyCode.JoystickButton19; i++)
+    {
+        if (UnityEngine.Input.GetKeyDown((KeyCode)i))
+        {
+            return true;
+        }
+    }
+
+    // 检查所有鼠标按键（技术宪法第二十二条：所有鼠标按键都触发）
+    for (int i = 0; i < 6; i++) // 支持最多6个鼠标按键
+    {
+        if (UnityEngine.Input.GetMouseButtonDown(i))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// 优化后：使用 Input.anyKeyDown
+private bool CheckAnyInput()
+{
+    // 使用 Input.anyKeyDown 检查任何按键
+    if (Input.anyKeyDown)
+    {
+        return true;
+    }
+
+    // 额外检查鼠标按键（如果需要）
+    if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+    {
+        return true;
+    }
+
+    return false;
+}
+```
+
+### 编码修复方案
+1. 将文件编码转换为 UTF-8 with BOM
+2. 修复乱码的中文注释
+
+### UIManager.cs 修复方案
+1. 修复冷却时间显示bug
+2. 确保文本显示正确
+
+## 执行步骤
+1. 备份原文件
+2. 创建优化版本
+3. 测试验证
+4. 提交优化
