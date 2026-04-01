@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using TapCat.Animation;
 
 #if UNITY_EDITOR
 using UnityEditor;
