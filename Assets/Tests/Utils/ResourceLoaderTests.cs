@@ -1,5 +1,6 @@
-﻿using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
+using NUnit.Framework;
 using TapCat.Utils;
 
 namespace TapCat.Tests.Utils
