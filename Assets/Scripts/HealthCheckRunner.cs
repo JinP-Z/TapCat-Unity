@@ -3,32 +3,30 @@ using System.IO;
 using System.Linq;
 
 /// <summary>
-/// Runner script to perform comprehensive health check
+/// Runner script to perform comprehensive health check.
 /// </summary>
 public class HealthCheckRunner : MonoBehaviour
 {
     void Start()
     {
         Debug.Log("=== TAPCAT PROJECT COMPREHENSIVE HEALTH CHECK ===");
-        
-        // Run all checks
+
         bool structureOk = CheckProjectStructure();
         bool scriptsOk = CheckScripts();
         bool resourcesOk = CheckResources();
         bool scenesOk = CheckScenes();
         bool dependenciesOk = CheckDependencies();
-        
-        // Summary
+
         Debug.Log("\n=== HEALTH CHECK SUMMARY ===");
         Debug.Log($"Project Structure: {(structureOk ? "PASS" : "FAIL")}");
         Debug.Log($"Scripts: {(scriptsOk ? "PASS" : "FAIL")}");
         Debug.Log($"Resources: {(resourcesOk ? "PASS" : "FAIL")}");
         Debug.Log($"Scenes: {(scenesOk ? "PASS" : "FAIL")}");
         Debug.Log($"Dependencies: {(dependenciesOk ? "PASS" : "FAIL")}");
-        
+
         bool allPassed = structureOk && scriptsOk && resourcesOk && scenesOk && dependenciesOk;
-        Debug.Log($"\nOVERALL STATUS: {(allPassed ? "✅ ALL CHECKS PASSED" : "❌ SOME CHECKS FAILED")}");
-        
+        Debug.Log($"\nOVERALL STATUS: {(allPassed ? "ALL CHECKS PASSED" : "SOME CHECKS FAILED")}");
+
         if (!allPassed)
         {
             Debug.LogWarning("\n=== RECOMMENDED ACTIONS ===");
@@ -38,12 +36,12 @@ public class HealthCheckRunner : MonoBehaviour
             Debug.LogWarning("4. Check Package Manager for missing packages");
         }
     }
-    
+
     private bool CheckProjectStructure()
     {
         Debug.Log("\n--- Project Structure Check ---");
         bool allOk = true;
-        
+
         string[] requiredDirs = new string[]
         {
             "Assets",
@@ -54,30 +52,29 @@ public class HealthCheckRunner : MonoBehaviour
             "Assets/Animators",
             "Assets/TextMesh Pro"
         };
-        
+
         foreach (string dir in requiredDirs)
         {
             string fullPath = Path.Combine(Application.dataPath.Replace("/Assets", ""), dir);
             bool exists = Directory.Exists(fullPath);
-            Debug.Log($"{dir.PadRight(30)} {(exists ? "✅" : "❌")}");
+            Debug.Log($"{dir.PadRight(30)} {(exists ? "OK" : "MISSING")}");
             if (!exists) allOk = false;
         }
-        
+
         return allOk;
     }
-    
+
     private bool CheckScripts()
     {
         Debug.Log("\n--- Scripts Check ---");
         bool allOk = true;
-        
+
         string scriptsPath = Path.Combine(Application.dataPath, "Scripts");
         if (Directory.Exists(scriptsPath))
         {
             string[] csFiles = Directory.GetFiles(scriptsPath, "*.cs", SearchOption.AllDirectories);
-            Debug.Log($"Total C# scripts: {csFiles.Length} ✅");
-            
-            // Check for key scripts
+            Debug.Log($"Total C# scripts: {csFiles.Length}");
+
             string[] keyScripts = new string[]
             {
                 "FinalTapCat_Animated.cs",
@@ -89,138 +86,132 @@ public class HealthCheckRunner : MonoBehaviour
                 "ProjectHealthCheck.cs",
                 "CompilationTest.cs"
             };
-            
+
             foreach (string script in keyScripts)
             {
                 string scriptPath = Path.Combine(scriptsPath, script);
                 bool exists = File.Exists(scriptPath);
-                Debug.Log($"{script.PadRight(30)} {(exists ? "✅" : "❌")}");
+                Debug.Log($"{script.PadRight(30)} {(exists ? "OK" : "MISSING")}");
                 if (!exists) allOk = false;
             }
         }
         else
         {
-            Debug.LogError("Scripts directory not found! ❌");
+            Debug.LogError("Scripts directory not found!");
             allOk = false;
         }
-        
+
         return allOk;
     }
-    
+
     private bool CheckResources()
     {
         Debug.Log("\n--- Resources Check ---");
         bool allOk = true;
-        
-        // Check Resources/CatAnimation
+
         string resourcesAnimPath = Path.Combine(Application.dataPath, "Resources", "CatAnimation");
         if (Directory.Exists(resourcesAnimPath))
         {
             string[] pngFiles = Directory.GetFiles(resourcesAnimPath, "cat_anim_*.png");
             bool hasAllFrames = pngFiles.Length >= 10;
-            Debug.Log($"Resources animation frames: {pngFiles.Length}/10 {(hasAllFrames ? "✅" : "❌")}");
+            Debug.Log($"Resources animation frames: {pngFiles.Length}/10 {(hasAllFrames ? "OK" : "INCOMPLETE")}");
             if (!hasAllFrames) allOk = false;
-            
+
             if (pngFiles.Length > 0)
             {
                 FileInfo sampleFile = new FileInfo(pngFiles[0]);
                 bool isPlaceholder = sampleFile.Length < 1000;
-                Debug.Log($"  Sample frame size: {sampleFile.Length} bytes {(isPlaceholder ? "⚠️ (placeholder)" : "✅")}");
+                Debug.Log($"  Sample frame size: {sampleFile.Length} bytes {(isPlaceholder ? "(placeholder?)" : "OK")}");
             }
         }
         else
         {
-            Debug.LogError("Resources/CatAnimation directory not found! ❌");
+            Debug.LogError("Resources/CatAnimation directory not found!");
             allOk = false;
         }
-        
-        // Check Sprites/CatAnimation
+
         string spritesAnimPath = Path.Combine(Application.dataPath, "Sprites", "CatAnimation");
         if (Directory.Exists(spritesAnimPath))
         {
             string[] pngFiles = Directory.GetFiles(spritesAnimPath, "cat_anim_*.png");
             bool hasAllFrames = pngFiles.Length >= 10;
-            Debug.Log($"Sprites animation frames: {pngFiles.Length}/10 {(hasAllFrames ? "✅" : "❌")}");
+            Debug.Log($"Sprites animation frames: {pngFiles.Length}/10 {(hasAllFrames ? "OK" : "INCOMPLETE")}");
             if (!hasAllFrames) allOk = false;
         }
         else
         {
-            Debug.LogError("Sprites/CatAnimation directory not found! ❌");
+            Debug.LogError("Sprites/CatAnimation directory not found!");
             allOk = false;
         }
-        
-        // Check PlaceholderCat
+
         string placeholderPath = Path.Combine(Application.dataPath, "Sprites", "PlaceholderCat.png");
         if (File.Exists(placeholderPath))
         {
-            Debug.Log("PlaceholderCat.png: ✅");
+            Debug.Log("PlaceholderCat.png: OK");
         }
         else
         {
-            Debug.LogWarning("PlaceholderCat.png: ❌ (some scripts may fail)");
+            Debug.LogWarning("PlaceholderCat.png: MISSING (some scripts may fail)");
         }
-        
+
         return allOk;
     }
-    
+
     private bool CheckScenes()
     {
         Debug.Log("\n--- Scenes Check ---");
         bool allOk = true;
-        
+
         string scenesPath = Path.Combine(Application.dataPath, "Scenes");
         if (Directory.Exists(scenesPath))
         {
             string[] sceneFiles = Directory.GetFiles(scenesPath, "*.unity");
             Debug.Log($"Scene files in Scenes/: {sceneFiles.Length}");
         }
-        
-        // Check main scene
+
         string mainScenePath = Path.Combine(Application.dataPath, "TapCat.unity");
         if (File.Exists(mainScenePath))
         {
-            Debug.Log("Main scene (TapCat.unity): ✅");
+            Debug.Log("Main scene (TapCat.unity): OK");
         }
         else
         {
-            Debug.LogError("Main scene (TapCat.unity): ❌ - CRITICAL!");
+            Debug.LogError("Main scene (TapCat.unity): MISSING - CRITICAL!");
             allOk = false;
         }
-        
+
         return allOk;
     }
-    
+
     private bool CheckDependencies()
     {
         Debug.Log("\n--- Dependencies Check ---");
         bool allOk = true;
-        
-        // Check for TextMesh Pro
+
         string tmproPath = Path.Combine(Application.dataPath, "TextMesh Pro");
         if (Directory.Exists(tmproPath))
         {
-            Debug.Log("TextMesh Pro: ✅ (package installed)");
+            Debug.Log("TextMesh Pro: OK (package installed)");
         }
         else
         {
-            Debug.LogWarning("TextMesh Pro: ❌ (check Package Manager)");
+            Debug.LogWarning("TextMesh Pro: MISSING (check Package Manager)");
         }
-        
-        // Check packages manifest
+
         string manifestPath = Path.Combine(Application.dataPath.Replace("/Assets", ""), "Packages", "manifest.json");
         if (File.Exists(manifestPath))
         {
-            Debug.Log("Packages manifest: ✅");
+            Debug.Log("Packages manifest: OK");
         }
         else
         {
-            Debug.LogError("Packages manifest: ❌");
+            Debug.LogError("Packages manifest: MISSING");
             allOk = false;
         }
-        
+
         return allOk;
     }
-    
+
     [ContextMenu("Run Full Health Check")]
     private void RunFullCheck()
     {

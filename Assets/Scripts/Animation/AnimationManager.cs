@@ -5,28 +5,24 @@ using TapCat.Input;
 namespace TapCat.Animation
 {
     /// <summary>
-    /// 动画管理器，负责管理猫咪的序列帧动画播放
-    /// 符合技术宪法第七章：动画系统规范
+    /// Sprite sequence animation manager driven by input events.
     /// </summary>
     public class AnimationManager : MonoBehaviour
     {
-        /// <summary>
-        /// 动画事件委托
-        /// </summary>
-        public event Action<int> OnFrameChanged;          // 帧索引变化
-        public event Action<int> OnLoopCompleted;         // 循环完成
-        public event Action<string> OnStatusChanged;      // 状态变化
+        public event Action<int> OnFrameChanged;
+        public event Action<int> OnLoopCompleted;
+        public event Action<string> OnStatusChanged;
 
-        [Header("资源设置")]
+        [Header("Resources")]
         [SerializeField] private string spriteBaseName = "cat_anim_";
         [SerializeField] private int totalFrames = 10;
         [SerializeField] private SpriteRenderer catRenderer;
 
-        [Header("播放设置")]
+        [Header("Playback")]
         [SerializeField] private bool playOnInput = true;
         [SerializeField] private bool loopAnimation = true;
 
-        [Header("状态")]
+        [Header("State")]
         [SerializeField] private int currentFrameIndex = 0;
         [SerializeField] private int completedLoops = 0;
         [SerializeField] private bool isPlaying = false;
@@ -35,35 +31,12 @@ namespace TapCat.Animation
         private InputManager inputManager;
         private bool hasValidFrames;
 
-        /// <summary>
-        /// 当前帧索引（0-9）
-        /// </summary>
         public int CurrentFrameIndex => currentFrameIndex;
-
-        /// <summary>
-        /// 完成的循环次数
-        /// </summary>
         public int CompletedLoops => completedLoops;
-
-        /// <summary>
-        /// 是否正在播放
-        /// </summary>
         public bool IsPlaying => isPlaying;
-
-        /// <summary>
-        /// 总帧数
-        /// </summary>
         public int TotalFrames => totalFrames;
-
-        /// <summary>
-        /// 是否有有效的动画帧
-        /// </summary>
         public bool HasValidFrames => hasValidFrames;
-
-        /// <summary>
-        /// 获取状态信息
-        /// </summary>
-        public string StatusInfo => $"循环{completedLoops}，帧{currentFrameIndex + 1}/{totalFrames}";
+        public string StatusInfo => $"Loop {completedLoops}, Frame {currentFrameIndex + 1}/{totalFrames}";
 
         private void Awake()
         {
@@ -73,9 +46,6 @@ namespace TapCat.Animation
             ApplyFirstFrame();
         }
 
-        /// <summary>
-        /// 初始化组件
-        /// </summary>
         private void InitializeComponents()
         {
             if (catRenderer == null)
@@ -84,23 +54,20 @@ namespace TapCat.Animation
                 if (catRenderer == null)
                 {
                     catRenderer = gameObject.AddComponent<SpriteRenderer>();
-                    Debug.LogWarning("AnimationManager: 添加了 SpriteRenderer 组件");
+                    Debug.LogWarning("AnimationManager: Added SpriteRenderer component.");
                 }
             }
 
-            // 查找输入管理器
             inputManager = FindObjectOfType<InputManager>();
             if (inputManager == null)
             {
-                Debug.LogError("AnimationManager: 未找到 InputManager 组件");
+                Debug.LogError("AnimationManager: InputManager not found in scene.");
             }
         }
 
-        /// <summary>
-        /// 加载动画帧
-        /// </summary>
         private void LoadAnimationFrames()
         {
+            totalFrames = Mathf.Max(1, totalFrames);
             animationFrames = new Sprite[totalFrames];
             int loadedFrames = 0;
 
@@ -108,7 +75,7 @@ namespace TapCat.Animation
             {
                 string frameName = $"{spriteBaseName}{i:00}";
                 Sprite frame = Resources.Load<Sprite>($"CatAnimation/{frameName}");
-                
+
                 if (frame != null)
                 {
                     animationFrames[i] = frame;
@@ -116,39 +83,33 @@ namespace TapCat.Animation
                 }
                 else
                 {
-                    Debug.LogWarning($"AnimationManager: 无法加载帧 {frameName}");
+                    Debug.LogWarning($"AnimationManager: Failed to load frame {frameName}.");
                 }
             }
 
             hasValidFrames = loadedFrames > 0;
-            
+
             if (hasValidFrames)
             {
-                Debug.Log($"AnimationManager: 成功加载 {loadedFrames}/{totalFrames} 帧");
-                OnStatusChanged?.Invoke($"已加载 {loadedFrames}/{totalFrames} 帧");
+                Debug.Log($"AnimationManager: Loaded {loadedFrames}/{totalFrames} frames.");
+                OnStatusChanged?.Invoke($"Loaded {loadedFrames}/{totalFrames} frames.");
             }
             else
             {
-                Debug.LogError("AnimationManager: 未加载到任何动画帧");
-                OnStatusChanged?.Invoke("错误：未找到动画资源");
+                Debug.LogError("AnimationManager: No animation frames loaded.");
+                OnStatusChanged?.Invoke("Error: No animation frames loaded.");
             }
         }
 
-        /// <summary>
-        /// 设置输入连接
-        /// </summary>
         private void SetupInputConnection()
         {
             if (inputManager != null && playOnInput)
             {
                 inputManager.OnInputTriggered += PlayNextFrame;
-                Debug.Log("AnimationManager: 已连接到输入系统");
+                Debug.Log("AnimationManager: Connected to input system.");
             }
         }
 
-        /// <summary>
-        /// 应用第一帧
-        /// </summary>
         private void ApplyFirstFrame()
         {
             if (hasValidFrames && catRenderer != null)
@@ -157,76 +118,62 @@ namespace TapCat.Animation
                 currentFrameIndex = 0;
                 isPlaying = false;
                 OnFrameChanged?.Invoke(0);
-                OnStatusChanged?.Invoke("待机状态");
+                OnStatusChanged?.Invoke("Idle");
             }
         }
 
-        /// <summary>
-        /// 播放下一帧
-        /// </summary>
         public void PlayNextFrame()
         {
             if (!hasValidFrames || animationFrames == null)
             {
-                Debug.LogWarning("AnimationManager: 没有有效的动画帧可播放");
+                Debug.LogWarning("AnimationManager: No valid frames to play.");
                 return;
             }
 
-            // 更新帧索引
             currentFrameIndex++;
-            
-            // 检查是否完成一个循环
+
             if (currentFrameIndex >= totalFrames)
             {
                 completedLoops++;
-                currentFrameIndex = 0; // 循环回到第一帧
-                
-                // 触发循环完成事件
+                currentFrameIndex = 0;
                 OnLoopCompleted?.Invoke(completedLoops);
-                
+
                 if (!loopAnimation)
                 {
-                    // 如果不循环，停止播放
                     isPlaying = false;
-                    OnStatusChanged?.Invoke($"循环完成 {completedLoops} 次");
+                    OnStatusChanged?.Invoke($"Loop completed {completedLoops} time(s). Stopped.");
                     return;
                 }
             }
 
-            // 应用当前帧
-            catRenderer.sprite = animationFrames[currentFrameIndex];
+            if (catRenderer != null)
+            {
+                catRenderer.sprite = animationFrames[currentFrameIndex];
+            }
+
             isPlaying = true;
-            
-            // 触发事件
             OnFrameChanged?.Invoke(currentFrameIndex);
             OnStatusChanged?.Invoke(StatusInfo);
-            
-            Debug.Log($"AnimationManager: 播放帧 {currentFrameIndex + 1}/{totalFrames}, 循环 {completedLoops}");
+            Debug.Log($"AnimationManager: Frame {currentFrameIndex + 1}/{totalFrames}, Loop {completedLoops}.");
         }
 
-        /// <summary>
-        /// 重置动画状态
-        /// </summary>
         public void ResetAnimation()
         {
             currentFrameIndex = 0;
             completedLoops = 0;
             isPlaying = false;
-            
+
             if (hasValidFrames && catRenderer != null)
             {
                 catRenderer.sprite = animationFrames[0];
             }
-            
+
             OnFrameChanged?.Invoke(0);
-            OnStatusChanged?.Invoke("已重置");
-            
-            Debug.Log("AnimationManager: 动画已重置");
+            OnStatusChanged?.Invoke("Reset");
+
+            Debug.Log("AnimationManager: Animation reset.");
         }
 
-        /// <summary>
-        /// 手动设置帧
-        /// </summary>
         public void SetFrame(int frameIndex)
         {
             if (!hasValidFrames || animationFrames == null)
@@ -236,22 +183,19 @@ namespace TapCat.Animation
 
             frameIndex = Mathf.Clamp(frameIndex, 0, totalFrames - 1);
             currentFrameIndex = frameIndex;
-            
+
             if (catRenderer != null)
             {
                 catRenderer.sprite = animationFrames[frameIndex];
             }
-            
+
             OnFrameChanged?.Invoke(frameIndex);
         }
 
-        /// <summary>
-        /// 启用/禁用输入播放
-        /// </summary>
         public void SetPlayOnInput(bool enable)
         {
             playOnInput = enable;
-            
+
             if (inputManager != null)
             {
                 if (enable)
@@ -265,36 +209,27 @@ namespace TapCat.Animation
             }
         }
 
-        /// <summary>
-        /// 获取详细的动画信息
-        /// </summary>
         public string GetAnimationInfo()
         {
-            return $"帧: {currentFrameIndex + 1}/{totalFrames}, 循环: {completedLoops}, 状态: {(isPlaying ? "播放中" : "待机")}";
+            string playState = isPlaying ? "Playing" : "Idle";
+            return $"Frame {currentFrameIndex + 1}/{totalFrames}, Loops: {completedLoops}, State: {playState}";
         }
 
         private void OnDestroy()
         {
-            // 清理事件订阅
             if (inputManager != null)
             {
                 inputManager.OnInputTriggered -= PlayNextFrame;
             }
         }
 
-        /// <summary>
-        /// 用于调试：手动触发下一帧
-        /// </summary>
-        [ContextMenu("手动播放下一帧")]
+        [ContextMenu("Debug Play Next Frame")]
         private void DebugPlayNextFrame()
         {
             PlayNextFrame();
         }
 
-        /// <summary>
-        /// 用于调试：重置动画
-        /// </summary>
-        [ContextMenu("重置动画")]
+        [ContextMenu("Debug Reset Animation")]
         private void DebugResetAnimation()
         {
             ResetAnimation();
